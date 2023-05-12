@@ -1,12 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+//import { StatusBar } from 'expo-status-bar';
+import React, { useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import AddRecipeOverview from './components/pages/AddRecipeOverview';
+import AddRecipeEditMode from './components/pages/AddRecipeEditMode';
+
+
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+
+  const [tempRecipe, setTempRecipe] = useState({link:""})
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='MainPage'>
+
+          <Stack.Screen name="AddRecipeOverview">
+            {(props) => <AddRecipeOverview {...props} setTempRecipe={ setTempRecipe } />}
+          </Stack.Screen>
+
+          <Stack.Screen name="AddRecipeEditMode">
+            {(props) => <AddRecipeEditMode {...props} tempRecipe={tempRecipe} setTempRecipe = {setTempRecipe} />}
+          </Stack.Screen>
+
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
