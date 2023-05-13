@@ -1,12 +1,12 @@
 import React from "react";
-import { View,Text,TextInput, Button } from "react-native";
+import { View,Text,TextInput, Button, SafeAreaView, ScrollView } from "react-native";
 
 export default function AddRecipeEditMode({tempRecipe, setTempRecipe}){
   return(
-  <View>
+  <View style={{flex: 1}}>
 
     <View>
-      <Text>{tempRecipe.link}</Text>
+      <Text style={{fontSize: 20}}>{tempRecipe.recipeJSON.title}</Text>
     </View>
 
     <View>{/** picture here */}</View>
@@ -21,9 +21,24 @@ export default function AddRecipeEditMode({tempRecipe, setTempRecipe}){
       <Button title="Edit"/>
     </View>
 
-    <View>
+    <View style={{flex: 1}}>
       <Text>Zutaten</Text>
-      {/** Recipe List here*/}
+      <SafeAreaView style={{padding: 10}}>
+          <ScrollView style={{}} contentContainerStyle={{marginBottom: 5}}>
+            {tempRecipe.recipeJSON.ingredients.map((ingredient, index) => {
+              return (
+                <View style={{height: 100}} key={index}>
+                  <Text>
+                    {ingredient.amount} {ingredient.unit}{" "}
+                    {ingredient.ingredient}
+                  </Text>
+                  <Button title="Edit" />
+                  <Button title="Delete" />
+                </View>
+              );
+            })}
+          </ScrollView>
+        </SafeAreaView>
     </View>
 
     <View>
