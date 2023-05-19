@@ -38,7 +38,7 @@ export default function AddRecipeOverview({ navigation, setTempRecipe }) {
 
       <Text> Or </Text>
 
-      <Button title="Import From Cheffkoch" onPress={handleChefkoch} />
+      <Button title="Import From Chefkoch" onPress={handleChefkoch} />
 
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>
         <View>
