@@ -1,7 +1,7 @@
 name: update
 on:
   push:
-    branches: ["master"]
+    branches: ["development"]
 
 jobs:
   update:
