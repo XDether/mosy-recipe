@@ -7,19 +7,33 @@ import RecipesOverview from "../pages/RecipesOverview";
 import CategoryScreen from "../pages/CategoryScreen";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import color from "../constants/colors";
+import { Button } from "react-native-elements";
 
-export default function NavigationTab()
+export default function TabNavigation({navigation})
 {
   const Tab = createBottomTabNavigator();
+  function handleOnPress()
+  {
+      navigation.navigate("AddRecipeOverview")
+  }
 
   return (
     <Tab.Navigator
         screenOptions={({ route }) => ({
+          headerRight: ()=>{return <Button containerStyle={{marginRight : 10}} onPress={handleOnPress} type="clear" icon={<Ionicons name="ios-add" size={32} color={color.textPrimary}/>}/>},
+          headerStyle: {
+            backgroundColor: color.primary
+          },
+          tabBarShowLabel: false,
           tabBarStyle:{
             backgroundColor: color.primary,
             borderRadius: 100,
-            marginHorizontal:50,
+            marginHorizontal:20,
             marginBottom: 10,
+          },
+          tabBarActiveBackgroundColor: color.secondary,
+          tabBarItemStyle:{
+            borderRadius: 100
           },
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;

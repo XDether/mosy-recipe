@@ -3,10 +3,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import AddRecipeOverview from "../pages/AddRecipeOverview";
 import AddRecipeEditMode from "../pages/AddRecipeEditMode";
-import NavigationTab from  "../navigations/NavigationTab";
+import TabNavigation from  "./TabNavigation";
 
 
-export default function NavigationStack ()
+export default function MainNavigation ()
 {
   
   const [tempRecipe, setTempRecipe] = useState({link:""})
@@ -16,7 +16,7 @@ export default function NavigationStack ()
     <Stack.Navigator initialRouteName='EditPages'>
 
         <Stack.Screen name = "TabScreen" options={{headerShown : false}}>
-          {(props) => <NavigationTab {...props} setTempRecipe={ setTempRecipe } />}
+          {(props) => <TabNavigation {...props} setTempRecipe={ setTempRecipe } />}
         </Stack.Screen>
 
         <Stack.Screen name="AddRecipeOverview">
