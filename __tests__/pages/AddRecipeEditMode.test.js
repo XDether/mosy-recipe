@@ -1,9 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer'
 
-import AddRecipeOverview from '../../components/pages/AddRecipeOverview'
+import AddRecipeEditMode from '../../components/pages/AddRecipeEditMode'
 
 it('renders correctly', () => {
-  const tree = renderer.create(<AddRecipeOverview />).toJSON();
+  const tree = renderer.create(<AddRecipeEditMode />).toJSON();
   expect(tree).toMatchSnapshot();
 });

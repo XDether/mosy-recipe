@@ -23,7 +23,7 @@ export default function AddRecipeEditMode({
   const changeMode = (newMode) => {
     setMode(newMode);
   };
-  if (tempRecipe.link !== "") {
+  if (tempRecipe !== null) {
     return (
       <View style={{ flex: 1 }}>
         <View>
