@@ -15,7 +15,7 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function AddRecipeEditMode({
-  tempRecipe = null,
+  tempRecipe = {link: ""},
   setTempRecipe,
 }) {
   const [mode, setMode] = useState("ingredients");
