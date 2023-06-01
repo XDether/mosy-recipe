@@ -10,6 +10,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  Modal,
 } from "react-native";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -20,42 +21,70 @@ export default function AddRecipeEditMode({
   setTempRecipe,
 }) {
   const [mode, setMode] = useState("ingredients");
-  const [selectedUnit, setSelectedUnit] = useState('g');
-  const [ingredientValue, setIngredientValue] = useState('');
+  const [selectedUnit, setSelectedUnit] = useState("g");
+  const [ingredientValue, setIngredientValue] = useState("");
   const [amountValue, setAmountValue] = useState();
+
+  const [editIngredient, setEditIngredient] = useState("");
+  const [editAmount, setEditAmount] = useState("");
+  const [editedUnit, setEditedUnit] = useState("g");
+  const [editIndex, setEditIndex] = useState(null);
+
   const changeMode = (newMode) => {
     setMode(newMode);
   };
 
-  const ingredients = [];
+  const [recipes, setRecipes] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const openModal = (index) => {
+    const selectedRecipe = recipes[index];
+    setEditIndex(index);
+    setEditIngredient(selectedRecipe.ingredient);
+    setEditedUnit(selectedRecipe.unit);
+    setEditAmount(selectedRecipe.amount);
+    setIsModalVisible(true);
+  };
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleSave = () => {
+    const updatedRecipes = [...recipes];
+    updatedRecipes[editIndex] = {
+      ingredient: editIngredient,
+      amount: editAmount,
+      unit: editedUnit,
+    };
+    setRecipes(updatedRecipes);
+    closeModal();
+  };
 
   const addIngredient = () => {
-    if (ingredientValue !== '' && amountValue !== '') {
-      ingredients.push({
+    if (ingredientValue !== "" && amountValue !== "") {
+      const newRecipe = {
         ingredient: ingredientValue,
         amount: amountValue,
         unit: selectedUnit,
-      });
-      setIngredientValue('');
-      setAmountValue('');
-
-      console.log('ingredient added')
-    }	
+      };
+      const updatedRecipes = [...recipes, newRecipe];
+      setRecipes(updatedRecipes);
+      setIngredientValue("");
+      setAmountValue("");
+    }
   };
-
   const generateIngredientList = () => {
     ingredients.map((ingredient, index) => {
       return (
         <View style={{ height: 100 }} key={index}>
           <Text>
-            {ingredient.amount} {ingredient.unit}{" "}
-            {ingredient.ingredient}
+            {ingredient.amount} {ingredient.unit} {ingredient.ingredient}
           </Text>
           <Button title="Edit" />
           <Button title="Delete" />
         </View>
       );
-    })
+    });
   };
 
   if (tempRecipe.link !== "") {
@@ -167,79 +196,249 @@ export default function AddRecipeEditMode({
               {/* Zutaten View */}
               <View style={styles.ingredientsContainer}>
                 <Text style={styles.textSize}>Zutaten</Text>
-                <SafeAreaView>
-                  <View style={{ flexDirection: "row" }}>
-                    <TouchableOpacity onPress={addIngredient}
-                      style={{
-                        justifyContent: "center",
-                        alignContent: "center",
-                      }}
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    onPress={addIngredient}
+                    style={{
+                      justifyContent: "center",
+                      alignContent: "center",
+                    }}
+                  >
+                    <Ionicons name="pencil" size={25} color="black" />
+                  </TouchableOpacity>
+                  <TextInput
+                    style={{ fontSize: 20, textAlign: "center" }}
+                    placeholder="Zutat hinzufügen"
+                    value={ingredientValue}
+                    onChangeText={(text) => setIngredientValue(text)}
+                  />
+                  <TextInput
+                    inputMode="numeric"
+                    style={{ fontSize: 20, textAlign: "center" }}
+                    value={amountValue}
+                    onChangeText={(text) => setAmountValue(text)}
+                    placeholder="Menge"
+                  />
+                  <Picker
+                    style={{ height: 50, width: 130 }}
+                    selectedValue={selectedUnit}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setSelectedUnit(itemValue)
+                    }
+                  >
+                    <Picker.Item label="g" value="g" />
+                    <Picker.Item label="kg" value="kg" />
+                    <Picker.Item label="ml" value="ml" />
+                    <Picker.Item label="L" value="L" />
+                    <Picker.Item label="Stk" value="Stk" />
+                    <Picker.Item label="TL" value="TL" />
+                    <Picker.Item label="EL" value="EL" />
+                    <Picker.Item label="Prise" value="Prise" />
+                    <Picker.Item label="Msp" value="Msp" />
+                    <Picker.Item label="Bund" value="Bund" />
+                    <Picker.Item label="Packung" value="Packung" />
+                    <Picker.Item label="Dose" value="Dose" />
+                    <Picker.Item label="Becher" value="Becher" />
+                    <Picker.Item label="Tasse" value="Tasse" />
+                    <Picker.Item label="Glas" value="Glas" />
+                    <Picker.Item label="Flasche" value="Flasche" />
+                    <Picker.Item label="Scheibe" value="Scheibe" />
+                  </Picker>
+                </View>
+                <View>
+                  <SafeAreaView style={{ height: 180, padding: 10 }}>
+                    <ScrollView
+                      style={{ paddingBottom: 5 }}
+                      contentContainerStyle={{ marginBottom: 5 }}
                     >
-                      <Ionicons name="pencil" size={25} color="black" />
-                    </TouchableOpacity>
-                    <TextInput
-                      style={{ fontSize: 20, textAlign: "center" }}
-                      placeholder="Zutat hinzufügen"
-                      value={ingredientValue}
-                      onChangeText={(text) => setIngredientValue(text)}
-                    />
-                    <TextInput
-                      inputMode="numeric"
-                      style={{ fontSize: 20, textAlign: "center" }}
-                      value={amountValue}
-                      onChangeText={(text) => setAmountValue(text)}
-                      placeholder="Menge"
-                    />
-                    <Picker
-                      style={{ height: 50, width: 130 }}
-                      selectedValue={selectedUnit}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setSelectedUnit(itemValue)
-                      }
-                    >
-                      <Picker.Item label="g" value="g" />
-                      <Picker.Item label="kg" value="kg" />
-                      <Picker.Item label="ml" value="ml" />
-                      <Picker.Item label="L" value="L" />
-                      <Picker.Item label="Stk" value="Stk" />
-                      <Picker.Item label="TL" value="TL" />
-                      <Picker.Item label="EL" value="EL" />
-                      <Picker.Item label="Prise" value="Prise" />
-                      <Picker.Item label="Msp" value="Msp" />
-                      <Picker.Item label="Bund" value="Bund" />
-                      <Picker.Item label="Packung" value="Packung" />
-                      <Picker.Item label="Dose" value="Dose" />
-                      <Picker.Item label="Becher" value="Becher" />
-                      <Picker.Item label="Tasse" value="Tasse" />
-                      <Picker.Item label="Glas" value="Glas" />
-                      <Picker.Item label="Flasche" value="Flasche" />
-                      <Picker.Item label="Scheibe" value="Scheibe" />
-                    </Picker>
-                  </View>
-                </SafeAreaView>
+                      {recipes.map((ingredient, index) => {
+                        return (
+                          <View
+                            style={{
+                              flex: 1,
+                              width: "100%",
+                              flexDirection: "row",
+                            }}
+                            key={index}
+                          >
+                            <Text style={{ paddingBottom: 5, fontSize: 20 }}>
+                              {ingredient.amount} {ingredient.unit}{" "}
+                              {ingredient.ingredient}
+                            </Text>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                justifyContent: "center",
+                              }}
+                            >
+                              <TouchableOpacity
+                                style={{
+                                  paddingRight: 20,
+                                }}
+                                onPress={() => openModal(index)}
+                              >
+                                <Ionicons
+                                  name="pencil"
+                                  size={20}
+                                  color="black"
+                                />
+                              </TouchableOpacity>
+                              <Modal
+                                visible={isModalVisible}
+                                animationType="slide"
+                                onRequestClose={closeModal}
+                              >
+                                <View
+                                  style={{
+                                    flex: 1,
+                                  }}
+                                >
+                                  <View
+                                    style={{
+                                      flexDirection: "row",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                      padding: 50,
+                                    }}
+                                  >
+                                    <Text
+                                      style={{ fontSize: 20, paddingRight: 10 }}
+                                    >
+                                      Zutat bearbeiten:
+                                    </Text>
+                                    <TextInput
+                                      style={{
+                                        fontSize: 15,
+                                        justifyContent: "center",
+                                        alignSelf: "center",
+                                      }}
+                                      value={editIngredient}
+                                      onChangeText={(text) =>
+                                        setEditIngredient(text)
+                                      }
+                                      placeholder="Zutat"
+                                    />
+                                  </View>
+
+                                  <View
+                                    style={{
+                                      flexDirection: "row",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <Text style={{ fontSize: 20 }}>
+                                      Unit bearbeiten:
+                                    </Text>
+                                    <Picker
+                                      style={{ height: 50, width: 130 }}
+                                      selectedValue={editedUnit}
+                                      onValueChange={(itemValue, itemIndex) =>
+                                        setEditedUnit(itemValue)
+                                      }
+                                    >
+                                      <Picker.Item label="g" value="g" />
+                                      <Picker.Item label="kg" value="kg" />
+                                      <Picker.Item label="ml" value="ml" />
+                                      <Picker.Item label="L" value="L" />
+                                      <Picker.Item label="Stk" value="Stk" />
+                                      <Picker.Item label="TL" value="TL" />
+                                      <Picker.Item label="EL" value="EL" />
+                                      <Picker.Item
+                                        label="Prise"
+                                        value="Prise"
+                                      />
+                                      <Picker.Item label="Msp" value="Msp" />
+                                      <Picker.Item label="Bund" value="Bund" />
+                                      <Picker.Item
+                                        label="Packung"
+                                        value="Packung"
+                                      />
+                                      <Picker.Item label="Dose" value="Dose" />
+                                      <Picker.Item
+                                        label="Becher"
+                                        value="Becher"
+                                      />
+                                      <Picker.Item
+                                        label="Tasse"
+                                        value="Tasse"
+                                      />
+                                      <Picker.Item label="Glas" value="Glas" />
+                                      <Picker.Item
+                                        label="Flasche"
+                                        value="Flasche"
+                                      />
+                                      <Picker.Item
+                                        label="Scheibe"
+                                        value="Scheibe"
+                                      />
+                                    </Picker>
+                                  </View>
+                                  <View style={{    flexDirection: "row",
+                                      alignItems: "center",
+                                      justifyContent: "center", paddingTop : 50}}>
+                                    <Text style={{ fontSize: 20, paddingRight: 15}}>
+                                      Menge bearbeiten:
+                                    </Text>
+                                    <TextInput
+                                      style={{   fontSize: 18,
+                                        justifyContent: "center",
+                                        alignSelf: "center",}}
+                                      value={editAmount}
+                                      onChangeText={(text) =>
+                                        setEditAmount(text)
+                                      }
+                                      placeholder="Menge"
+                                      keyboardType="numeric"
+                                    />
+                                  </View>
+                                  <View style={{ flexDirection: "row", justifyContent: 'center', paddingTop: 50 }}>
+                                      <Button
+                                        title="Speichern"
+                                        onPress={handleSave}
+                                      />
+                                      <Button
+                                        title="Abbrechen"
+                                        onPress={closeModal}
+                                      />
+                                    </View>
+                                </View>
+                              </Modal>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  const updatedRecipes = [...recipes];
+                                  updatedRecipes.splice(index, 1);
+                                  setRecipes(updatedRecipes);
+                                }}
+                                style={{}}
+                              >
+                                <Ionicons
+                                  name="trash-outline"
+                                  size={20}
+                                  color="black"
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        );
+                      })}
+                    </ScrollView>
+                  </SafeAreaView>
+                </View>
               </View>
             </View>
           ) : (
             <View style={{ paddingTop: 30, paddingLeft: 10 }}>
               <View style={{ flexDirection: "row" }}>
-                <TouchableOpacity
-                >
+                <TouchableOpacity>
                   <Ionicons name="pencil" size={25} color="black" />
                 </TouchableOpacity>
                 <TextInput
                   value={ingredientValue}
                   onChangeText={(text) => setIngredientValue(text)}
                   style={styles.textSize}
-                  placeholder="Zutat hinzufügen"
+                  placeholder="Schritt hinzufügen"
                 />
-              </View>
-              <View>
-                <ScrollView
-                  style={{}}
-                  contentContainerStyle={{ marginBottom: 5 }}
-                >
-                  {console.log(ingredients)}
-                </ScrollView>
               </View>
             </View>
           )}
