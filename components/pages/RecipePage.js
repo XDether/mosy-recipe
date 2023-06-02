@@ -5,28 +5,18 @@ import storage from "../helpers/Storage";
 
 export default function RecipePage(){
     
-    [DataList,setDataList] = useState([])
-
-    const nice = [<Text></Text>]
+    [data,setData] = useState([])
 
     useEffect(() => {
         const updateData = async() =>
         {
-
-            const data = await storage.getData();
-            const tmpArray = []
-
-            for(let item of data)
-            {
-                tmpArray.push(<Text id={item.id}>{item.title}</Text>)
-            }
-            setDataList(tmpArray)
+            setData(await storage.getData());
         }
         updateData()
     }, []);
 
     return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        {DataList}
+        <Text>Recipe Page</Text>
     </View>)
 }
