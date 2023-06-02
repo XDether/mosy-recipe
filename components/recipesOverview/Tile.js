@@ -4,7 +4,7 @@ import { images } from "../constants/images";
 import colors from "../constants/colors";
 export default function Tile({ id, description, invisible, navigation }) {
   const onPressHandler = () => {
-    console.log("navigate somewhere");
+    navigation.navigate('RecipePage');
   };
   if (!invisible) {
     return (

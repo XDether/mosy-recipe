@@ -1,14 +1,13 @@
 //import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import MainNavigation from './components/navigations/MainNavigation';
+import Storage from './components/helpers/Storage';
+
 
 export default function App() {
   return( 
-  <NavigationContainer>
-    <MainNavigation/>
-  </NavigationContainer> 
+    <MainNavigation storage={Storage}/>
   );
 }
 
