@@ -9,7 +9,6 @@ export default function RecipePage(){
 
     const nice = [<Text></Text>]
 
-
     useEffect(() => {
         const updateData = async() =>
         {
@@ -26,9 +25,6 @@ export default function RecipePage(){
         updateData()
     }, []);
 
-
-
-    
     return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         {DataList}
