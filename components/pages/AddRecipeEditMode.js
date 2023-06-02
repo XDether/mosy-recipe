@@ -13,8 +13,11 @@ import {
   Modal,
 } from "react-native";
 
+import unitData from "../partials/units";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
+import styles from "../styles/AddRecipeEditModeStyle";
+import ImageBackgroundComp from "../addRecipeEditModeComponents/imageBackgroundComp";
 
 export default function AddRecipeEditMode({
   tempRecipe = { link: "" },
@@ -29,20 +32,20 @@ export default function AddRecipeEditMode({
   const [editAmount, setEditAmount] = useState("");
   const [editedUnit, setEditedUnit] = useState("g");
   const [editIndex, setEditIndex] = useState(null);
+  
 
   const changeMode = (newMode) => {
     setMode(newMode);
   };
-
-  const [recipes, setRecipes] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const openModal = (index) => {
-    const selectedRecipe = recipes[index];
+    const selectedIngredient = ingredient[index];
     setEditIndex(index);
-    setEditIngredient(selectedRecipe.ingredient);
-    setEditedUnit(selectedRecipe.unit);
-    setEditAmount(selectedRecipe.amount);
+    setEditIngredient(selectedIngredient.ingredient);
+    setEditedUnit(selectedIngredient.unit);
+    setEditAmount(selectedIngredient.amount);
     setIsModalVisible(true);
   };
   const closeModal = () => {
@@ -50,41 +53,28 @@ export default function AddRecipeEditMode({
   };
 
   const handleSave = () => {
-    const updatedRecipes = [...recipes];
-    updatedRecipes[editIndex] = {
+    const updatedIngredient = [...ingredients];
+    updatedIngredient[editIndex] = {
       ingredient: editIngredient,
       amount: editAmount,
       unit: editedUnit,
     };
-    setRecipes(updatedRecipes);
+    setIngredients(updatedIngredient);
     closeModal();
   };
 
   const addIngredient = () => {
     if (ingredientValue !== "" && amountValue !== "") {
-      const newRecipe = {
+      const newIngredient = {
         ingredient: ingredientValue,
         amount: amountValue,
         unit: selectedUnit,
       };
-      const updatedRecipes = [...recipes, newRecipe];
-      setRecipes(updatedRecipes);
+      const updatedIngredient = [...ingredients, newIngredient];
+      setIngredients(updatedIngredient);
       setIngredientValue("");
       setAmountValue("");
     }
-  };
-  const generateIngredientList = () => {
-    ingredients.map((ingredient, index) => {
-      return (
-        <View style={{ height: 100 }} key={index}>
-          <Text>
-            {ingredient.amount} {ingredient.unit} {ingredient.ingredient}
-          </Text>
-          <Button title="Edit" />
-          <Button title="Delete" />
-        </View>
-      );
-    });
   };
 
   if (tempRecipe.link !== "") {
@@ -136,21 +126,7 @@ export default function AddRecipeEditMode({
   } else {
     return (
       <View style={{ flex: 1, flexDirection: "column" }}>
-        <View style={styles.imageContainer}>
-          <ImageBackground
-            style={styles.image}
-            resizeMode="cover"
-            source={require("../../assets/black_image.jpg")}
-          >
-            <View style={styles.textOnImage}>
-              <Text style={styles.imageText}>------</Text>
-              <TouchableOpacity>
-                <Ionicons name="pencil" size={30} color="white" />
-              </TouchableOpacity>
-            </View>
-          </ImageBackground>
-        </View>
-
+        <ImageBackgroundComp styles={styles} />
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
             <TouchableOpacity onPress={() => changeMode("ingredients")}>
@@ -226,23 +202,15 @@ export default function AddRecipeEditMode({
                       setSelectedUnit(itemValue)
                     }
                   >
-                    <Picker.Item label="g" value="g" />
-                    <Picker.Item label="kg" value="kg" />
-                    <Picker.Item label="ml" value="ml" />
-                    <Picker.Item label="L" value="L" />
-                    <Picker.Item label="Stk" value="Stk" />
-                    <Picker.Item label="TL" value="TL" />
-                    <Picker.Item label="EL" value="EL" />
-                    <Picker.Item label="Prise" value="Prise" />
-                    <Picker.Item label="Msp" value="Msp" />
-                    <Picker.Item label="Bund" value="Bund" />
-                    <Picker.Item label="Packung" value="Packung" />
-                    <Picker.Item label="Dose" value="Dose" />
-                    <Picker.Item label="Becher" value="Becher" />
-                    <Picker.Item label="Tasse" value="Tasse" />
-                    <Picker.Item label="Glas" value="Glas" />
-                    <Picker.Item label="Flasche" value="Flasche" />
-                    <Picker.Item label="Scheibe" value="Scheibe" />
+                    {unitData.map((unit, index) => {
+                      return (
+                        <Picker.Item
+                          key={index}
+                          label={unit.label}
+                          value={unit.value}
+                        />
+                      );
+                    })}
                   </Picker>
                 </View>
                 <View>
@@ -251,7 +219,7 @@ export default function AddRecipeEditMode({
                       style={{ paddingBottom: 5 }}
                       contentContainerStyle={{ marginBottom: 5 }}
                     >
-                      {recipes.map((ingredient, index) => {
+                      {ingredients.map((ingredient, index) => {
                         return (
                           <View
                             style={{
@@ -337,53 +305,36 @@ export default function AddRecipeEditMode({
                                         setEditedUnit(itemValue)
                                       }
                                     >
-                                      <Picker.Item label="g" value="g" />
-                                      <Picker.Item label="kg" value="kg" />
-                                      <Picker.Item label="ml" value="ml" />
-                                      <Picker.Item label="L" value="L" />
-                                      <Picker.Item label="Stk" value="Stk" />
-                                      <Picker.Item label="TL" value="TL" />
-                                      <Picker.Item label="EL" value="EL" />
-                                      <Picker.Item
-                                        label="Prise"
-                                        value="Prise"
-                                      />
-                                      <Picker.Item label="Msp" value="Msp" />
-                                      <Picker.Item label="Bund" value="Bund" />
-                                      <Picker.Item
-                                        label="Packung"
-                                        value="Packung"
-                                      />
-                                      <Picker.Item label="Dose" value="Dose" />
-                                      <Picker.Item
-                                        label="Becher"
-                                        value="Becher"
-                                      />
-                                      <Picker.Item
-                                        label="Tasse"
-                                        value="Tasse"
-                                      />
-                                      <Picker.Item label="Glas" value="Glas" />
-                                      <Picker.Item
-                                        label="Flasche"
-                                        value="Flasche"
-                                      />
-                                      <Picker.Item
-                                        label="Scheibe"
-                                        value="Scheibe"
-                                      />
+                                      {unitJSON.map((unit, index) => {
+                                        return (
+                                          <Picker.Item
+                                            key={index}
+                                            label={unit.label}
+                                            value={unit.value}
+                                          />
+                                        );
+                                      })}
                                     </Picker>
                                   </View>
-                                  <View style={{    flexDirection: "row",
+                                  <View
+                                    style={{
+                                      flexDirection: "row",
                                       alignItems: "center",
-                                      justifyContent: "center", paddingTop : 50}}>
-                                    <Text style={{ fontSize: 20, paddingRight: 15}}>
+                                      justifyContent: "center",
+                                      paddingTop: 50,
+                                    }}
+                                  >
+                                    <Text
+                                      style={{ fontSize: 20, paddingRight: 15 }}
+                                    >
                                       Menge bearbeiten:
                                     </Text>
                                     <TextInput
-                                      style={{   fontSize: 18,
+                                      style={{
+                                        fontSize: 18,
                                         justifyContent: "center",
-                                        alignSelf: "center",}}
+                                        alignSelf: "center",
+                                      }}
                                       value={editAmount}
                                       onChangeText={(text) =>
                                         setEditAmount(text)
@@ -392,23 +343,29 @@ export default function AddRecipeEditMode({
                                       keyboardType="numeric"
                                     />
                                   </View>
-                                  <View style={{ flexDirection: "row", justifyContent: 'center', paddingTop: 50 }}>
-                                      <Button
-                                        title="Speichern"
-                                        onPress={handleSave}
-                                      />
-                                      <Button
-                                        title="Abbrechen"
-                                        onPress={closeModal}
-                                      />
-                                    </View>
+                                  <View
+                                    style={{
+                                      flexDirection: "row",
+                                      justifyContent: "center",
+                                      paddingTop: 50,
+                                    }}
+                                  >
+                                    <Button
+                                      title="Speichern"
+                                      onPress={handleSave}
+                                    />
+                                    <Button
+                                      title="Abbrechen"
+                                      onPress={closeModal}
+                                    />
+                                  </View>
                                 </View>
                               </Modal>
                               <TouchableOpacity
                                 onPress={() => {
-                                  const updatedRecipes = [...recipes];
-                                  updatedRecipes.splice(index, 1);
-                                  setRecipes(updatedRecipes);
+                                  const updatedIngredients = [...ingredients];
+                                  updatedIngredients.splice(index, 1);
+                                  setIngredients(updatedIngredients);
                                 }}
                                 style={{}}
                               >
@@ -467,48 +424,4 @@ export default function AddRecipeEditMode({
   }
 }
 
-const styles = StyleSheet.create({
-  image: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height / 3,
-    justifyContent: "flex-end",
-  },
-  imageContainer: {
-    flex: 1,
-    paddingBottom: 50,
-  },
-  imageText: {
-    color: "white",
-    fontSize: 30,
-  },
-  textOnImage: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 10,
-  },
-  textRow: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  textContainer: {
-    flex: 2,
-    flexDirection: "column",
-  },
-  iconContainer: {
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  categorieContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-  },
-  ingredientsContainer: {
-    padding: 20,
-  },
-  textSize: {
-    fontSize: 20,
-  },
-});
+
