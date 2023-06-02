@@ -8,11 +8,14 @@ export default function RecipePage(){
     [data,setData] = useState([])
 
     useEffect(() => {
-        const updateData = async() =>
+        const UpdateRecipe = async()=>
         {
-            setData(await storage.getData());
+          const data = await storage.getData();
+          if(data != null){
+            setRecipe(data);
+          }
         }
-        updateData()
+        UpdateRecipe()
     }, []);
 
     return (
