@@ -58,8 +58,9 @@ export default function TabNavigation({navigation})
       >
 
       <Tab.Screen name = "Home" component={HomeScreen}/>
-      <Tab.Screen name = "Recipes" component={RecipesOverview}/>
+      <Tab.Screen name="Recipes" component={RecipesOverview}/>
       <Tab.Screen name = "Categorys" component={CategoryScreen}/>
+      
     </Tab.Navigator>
   )
 }

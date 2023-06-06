@@ -1,6 +1,6 @@
 export default class Recipe
 {
-    constructor(id, categoryID, title, ingredients, instructions, description)
+    constructor(id, categoryID, title, ingredients, instructions, description, portions,time)
     {
         this.id = id
         this.categoryID = categoryID;
@@ -8,5 +8,8 @@ export default class Recipe
         this.ingredients = ingredients;
         this.instructions = instructions;
         this.description = description;
+        this.portions = portions;
+        this.time = time;
+
     }
 }

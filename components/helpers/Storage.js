@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { data } from 'cheerio/lib/api/attributes';
+import Category from '../RecipePage/Category';
 
 const createData = async (value) => {
   try {
@@ -13,6 +15,20 @@ const getData = async () => {
   try {
     const jsonValue = await AsyncStorage.getItem('@storage_Key')
     return jsonValue != null ? JSON.parse(jsonValue) : null;
+  } catch(e) {
+    // error reading value
+  }
+}
+
+const getDataWithId = async (id) => {
+  try {
+    const data = await getData()
+    for(let item of data)
+    {
+      if (id == item.id){
+        return item
+      }
+    }
   } catch(e) {
     // error reading value
   }
@@ -42,4 +58,4 @@ const mergeData = async (value) =>
 
 }
 
-export default {getData, createData, mergeData, addData}
+export default {getData, createData, mergeData, addData, getDataWithId}
