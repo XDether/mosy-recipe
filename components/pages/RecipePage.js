@@ -20,9 +20,11 @@ export default function RecipePage(props,{id}){
     useEffect(() => {
         const UpdateRecipe = async()=>
         {
-          const data = await storage.getDataWithId(props.route.params.id);
-          if(data != null){
-            setData(data);
+          if(props != null){
+            const data = await storage.getDataWithId(props.route.params.id);
+            if(data != null){
+              setData(data);
+            }
           }
         }
         UpdateRecipe()
