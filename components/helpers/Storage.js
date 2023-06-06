@@ -1,6 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { data } from 'cheerio/lib/api/attributes';
-import Category from '../RecipePage/Category';
 
 const createData = async (value) => {
   try {
