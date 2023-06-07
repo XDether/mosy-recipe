@@ -18,6 +18,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
 import styles from "../styles/AddRecipeEditModeStyle";
 import ImageBackgroundComp from "../addRecipeEditModeComponents/imageBackgroundComp";
+import unitJSON from "../partials/units";
 
 export default function AddRecipeEditMode({
   tempRecipe = { link: "" },
