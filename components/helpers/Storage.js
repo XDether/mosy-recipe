@@ -18,6 +18,20 @@ const getData = async () => {
   }
 }
 
+const getDataWithId = async (id) => {
+  try {
+    const data = await getData()
+    for(let item of data)
+    {
+      if (id == item.id){
+        return item
+      }
+    }
+  } catch(e) {
+    // error reading value
+  }
+}
+
 const addData = async (value) => {
   try {
     const data = await getData();
@@ -42,4 +56,4 @@ const mergeData = async (value) =>
 
 }
 
-export default {getData, createData, mergeData, addData}
+export default {getData, createData, mergeData, addData, getDataWithId}

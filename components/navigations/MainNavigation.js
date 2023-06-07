@@ -16,10 +16,12 @@ export default function MainNavigation ()
   useEffect(() => {
     const createTestData = async ()=>
     {
-      await storage.createData([new Recipe('1','2','3','4','5','6')])
-      await storage.addData(new Recipe('2','2','3','4','5','6'))
-      await storage.addData(new Recipe('3','2','3','4','5','6'))
-      await storage.addData(new Recipe('4','2','3','4','5','6'))
+      await storage.createData([new Recipe('1','Food','Beef',
+      [
+        {amount:'3',ingredient:'beef'},
+        {amount:'3',ingredient:'Salt'}
+      ]
+      ,'Just Put that salt on da beef','a beefy recipe',"3hrs","3port")])
     }
     createTestData();
   }, []);

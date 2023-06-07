@@ -3,9 +3,11 @@ import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { images } from "../constants/images";
 import colors from "../constants/colors";
 export default function Tile({ id, description, invisible, navigation }) {
+  
   const onPressHandler = () => {
-    navigation.navigate('RecipePage');
+    navigation.navigate('RecipePage', {id:id});
   };
+
   if (!invisible) {
     return (
       <TouchableOpacity onPress={onPressHandler}>
