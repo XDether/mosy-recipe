@@ -56,4 +56,24 @@ const mergeData = async (value) =>
 
 }
 
-export default {getData, createData, mergeData, addData, getDataWithId}
+const generateIDFromData = (data) =>
+{
+  let id = 0;
+  if(data.length === 0)
+  {
+    return id;
+  }
+  else
+  {
+    for(item of data)
+    {
+      if(item.id > id)
+      {
+        id = item.id;
+      }
+    }
+    return id + 1;
+  }
+}
+
+export default {getData, createData, mergeData, addData, getDataWithId, generateIDFromData}
