@@ -4,4 +4,5 @@ export default{
     secondary: '#865DFF',
     iconPrimary: '#000',
     textPrimary: '#FFF',
+    background: "rgb(245, 196, 249)"
 }

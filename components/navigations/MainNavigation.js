@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import AddRecipeOverview from "../pages/AddRecipeOverview";
 import AddRecipeEditMode from "../pages/AddRecipeEditMode";
 import TabNavigation from  "./TabNavigation";
 import RecipePage from "../pages/RecipePage";
 import Recipe from "../models/Recipe";
 import storage from "../helpers/Storage";
+import colors from "../constants/colors";
 
 export default function MainNavigation ()
 {
@@ -27,22 +28,22 @@ export default function MainNavigation ()
   }, []);
 
   return(
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='EditPages'>
+    <NavigationContainer theme={{ colors: {...DefaultTheme.colors , background : colors.background}}}>
+      <Stack.Navigator initialRouteName='EditPages' >
 
           <Stack.Screen name = "TabScreen" options={{headerShown : false}}>
             {(props) => <TabNavigation {...props}/>}
           </Stack.Screen>
 
-          <Stack.Screen name="AddRecipeOverview">
+          <Stack.Screen name="AddRecipeOverview" options={{ headerStyle:{backgroundColor: colors.primary}}}>
             {(props) => <AddRecipeOverview {...props} setTempRecipe={ setTempRecipe } />}
           </Stack.Screen>
 
-          <Stack.Screen name="AddRecipeEditMode">
+          <Stack.Screen name="AddRecipeEditMode" options={{ headerStyle:{backgroundColor: colors.primary}}}>
             {(props) => <AddRecipeEditMode {...props} tempRecipe={tempRecipe} setTempRecipe = {setTempRecipe} />}
           </Stack.Screen>
 
-          <Stack.Screen name="RecipePage">
+          <Stack.Screen name="RecipePage" options={{ headerStyle:{backgroundColor: colors.primary}}}>
             {(props) => <RecipePage {...props}/>}
           </Stack.Screen>
           
