@@ -9,6 +9,9 @@ import {
 } from "react-native";
 
 import * as cheerio from "cheerio";
+import { Divider, Input } from "react-native-elements";
+import colors from "../constants/colors"
+import { TouchableOpacity } from "react-native";
 
 export default function AddRecipeOverview({ navigation, setTempRecipe }) {
   const [link, setLink] = useState("");
@@ -33,23 +36,32 @@ export default function AddRecipeOverview({ navigation, setTempRecipe }) {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Button title="Create New Recipe" onPress={handleNewRecipe} />
-
-      <Text> Or </Text>
-
-      <Button title="Import From Chefkoch" onPress={handleChefkoch} />
-
+    <View style={{marginHorizontal: 20 }}>
+      <Text style={{marginTop: 10, fontSize: 14, fontWeight: 400}}> Chefkoch Gericht: </Text>
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss}>
         <View>
           <TextInput
-            style={{ height: 40, borderColor: "gray", borderWidth: 1 }}
-            placeholder="insert Chefkoch Link"
+            style={{ height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:5,overflow: "scroll", textAlign:"center" }}
+            placeholder="Chefkoch Link"
             onChangeText={(text) => setLink(text)}
             value={link}
           />
         </View>
       </TouchableWithoutFeedback>
+
+      <TouchableOpacity style={{backgroundColor: colors.primary, padding: 5, borderRadius: 5, marginTop:10}} onPress={handleChefkoch}>
+        <Text style={{textAlign: "center"}}>Import</Text>
+      </TouchableOpacity>
+
+      <View style={{display:"flex" ,marginVertical: 20, alignItems:"center", flexDirection:"row",justifyContent:"center"}}>
+        <View style={{backgroundColor:"gray", width: 150, height: 1}}/>
+        <Text style={{width:50, textAlign:"center",marginHorizontal:"auto"}}> oder </Text>
+        <View style={{backgroundColor:"gray", width: 150, height: 1}}/>
+      </View>
+
+      <TouchableOpacity style={{backgroundColor: colors.primary, padding: 5, borderRadius: 5,}} onPress={handleNewRecipe}>
+        <Text style={{textAlign: "center"}}>eigenes Gericht</Text>
+      </TouchableOpacity>
     </View>
   );
 }

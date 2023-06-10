@@ -26,7 +26,7 @@ export default function TabNavigation({navigation})
           },
           tabBarShowLabel: false,
           tabBarStyle:{
-            backgroundColor: color.primary,
+          backgroundColor: color.primary,
             borderRadius: 100,
             marginHorizontal:20,
             marginBottom: 10,
