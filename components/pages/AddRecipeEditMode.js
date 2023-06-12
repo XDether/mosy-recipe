@@ -20,8 +20,11 @@ import styles from "../styles/AddRecipeEditModeStyle";
 import ImageBackgroundComp from "../addRecipeEditModeComponents/imageBackgroundComp";
 import unitJSON from "../partials/units";
 import storage from "../helpers/Storage.js";
+import Recipe from "../models/Recipe.js";
+import {Divider} from "react-native-elements";
+import colors from "../constants/colors.js";
 
-export default function AddRecipeEditMode(props, {
+export default function AddRecipeEditMode(props,{
   id,
   tempRecipe = {link: ""},
   setTempRecipe,
@@ -86,7 +89,10 @@ export default function AddRecipeEditMode(props, {
   };
 
   const saveDataToRecipe = async () => {
-    await storage.createData([new Recipe(id, 'Food', titleValue, ingredients, instructions)])
+    const allRecipes = await storage.getData();
+    const newID = storage.generateIDFromData(allRecipes);
+    await storage.createData([new Recipe(newID, "categoryID", "TestTitle", ingredients, instructions, "desc", 1, 1)]);
+    props.navigation.navigate("RecipePage", {id: newID});
   }
 
   const addIngredient = () => {
@@ -118,7 +124,7 @@ export default function AddRecipeEditMode(props, {
 
   if (tempRecipe.link !== "") {
     return (
-        <View style={{flex: 1}}>
+        <View style={{}}>
           <View>
             <Text style={{fontSize: 20}}>{tempRecipe.recipeJSON.title}</Text>
           </View>
@@ -128,7 +134,7 @@ export default function AddRecipeEditMode(props, {
             <Button title="Edit"/>
           </View>
 
-          <View style={{flex: 1}}>
+          <View style={{}}>
             <Text>Zutaten</Text>
             <SafeAreaView style={{padding: 10}}>
               <ScrollView style={{}} contentContainerStyle={{marginBottom: 5}}>
@@ -157,14 +163,14 @@ export default function AddRecipeEditMode(props, {
     );
   } else {
     return (
-        <View style={{flex: 1, flexDirection: "column"}}>
-          <ImageBackgroundComp styles={styles}/>
+        <View style={{overflow: "scroll",height: "100%"}}>
+          <ImageBackgroundComp styles={styles.image}/>
           <View style={styles.textContainer}>
             <View style={styles.textRow}>
-              <TouchableOpacity onPress={() => changeMode("ingredients")}>
+              <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() => changeMode("ingredients")}>
                 <Text style={styles.textSize}>Zutaten</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeMode("steps")}>
+              <TouchableOpacity  style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() => changeMode("steps")}>
                 <Text style={styles.textSize}>Zubereitung</Text>
               </TouchableOpacity>
             </View>
@@ -215,7 +221,7 @@ export default function AddRecipeEditMode(props, {
                         <Ionicons name="pencil" size={25} color="black"/>
                       </TouchableOpacity>
                       <TextInput
-                          style={{fontSize: 20, textAlign: "center"}}
+                          style={{fontSize: 20, textAlign: "center", marginRight: 5}}
                           placeholder="Zutat hinzufügen"
                           value={ingredientValue}
                           onChangeText={(text) => setIngredientValue(text)}
@@ -246,7 +252,7 @@ export default function AddRecipeEditMode(props, {
                       </Picker>
                     </View>
                     <View>
-                      <SafeAreaView style={{height: 180, padding: 10}}>
+                      <SafeAreaView style={{height: "79%", padding: 10}}>
                         <ScrollView
                             style={{paddingBottom: 5}}
                             contentContainerStyle={{marginBottom: 5}}
@@ -255,9 +261,9 @@ export default function AddRecipeEditMode(props, {
                             return (
                                 <View
                                     style={{
-                                      flex: 1,
                                       width: "100%",
                                       flexDirection: "row",
+                                      justifyContent: "space-between",
                                     }}
                                     key={index}
                                 >
@@ -283,6 +289,7 @@ export default function AddRecipeEditMode(props, {
                                           color="black"
                                       />
                                     </TouchableOpacity>
+                                    {/* DIVIDER HIER HIN  */}
                                     <Modal
                                         visible={isModalVisible}
                                         animationType="slide"
@@ -290,7 +297,6 @@ export default function AddRecipeEditMode(props, {
                                     >
                                       <View
                                           style={{
-                                            flex: 1,
                                           }}
                                       >
                                         <View
@@ -432,13 +438,12 @@ export default function AddRecipeEditMode(props, {
                     </View>
 
                     {instructions.length > 0 ? (
-                        <SafeAreaView style={{height: 350, padding: 20}}>
+                        <SafeAreaView style={{height: "100%", padding: 20}}>
                           <ScrollView style={{paddingBottom: 5}}
                                       contentContainerStyle={{marginBottom: 5}}>
                             {instructions.map((instruction, index) => {
                               return (
                                   <View style={{
-                                    flex: 1,
                                     width: "80%",
                                     flexDirection: "row",
                                     justifyContent: 'space-between',
@@ -466,7 +471,9 @@ export default function AddRecipeEditMode(props, {
           </View>
           <View
               style={{
-                flex: 0.2,
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
                 backgroundColor: "pink",
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -479,7 +486,7 @@ export default function AddRecipeEditMode(props, {
             </TouchableOpacity>
 
             <Text style={styles.textSize}>Edit Mode</Text>
-            <TouchableOpacity onPress={() => saveDataToRecipe}>
+            <TouchableOpacity onPress={saveDataToRecipe}>
               <Ionicons name="checkmark-circle-outline" size={30} color="black"/>
             </TouchableOpacity>
           </View>

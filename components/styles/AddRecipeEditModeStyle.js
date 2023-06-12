@@ -1,12 +1,11 @@
 import { StyleSheet, Dimensions } from "react-native";
 export default StyleSheet.create({
     image: {
-      width: Dimensions.get("window").width,
-      height: Dimensions.get("window").height / 3,
+      width: "100%",
+      height: 10,
       justifyContent: "flex-end",
     },
     imageContainer: {
-      flex: 1,
       paddingBottom: 50,
     },
     imageText: {
@@ -19,11 +18,11 @@ export default StyleSheet.create({
       padding: 10,
     },
     textRow: {
+      marginTop: 10,
       flexDirection: "row",
       justifyContent: "space-evenly",
     },
     textContainer: {
-      flex: 2,
       flexDirection: "column",
     },
     iconContainer: {
