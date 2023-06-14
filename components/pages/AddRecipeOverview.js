@@ -32,6 +32,7 @@ export default function AddRecipeOverview({ navigation, setTempRecipe }) {
   };
 
   const handleNewRecipe = () => {
+    setTempRecipe(null);
     navigation.navigate("AddRecipeEditMode");
   };
 

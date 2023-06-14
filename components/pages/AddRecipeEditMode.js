@@ -62,9 +62,15 @@ export default function AddRecipeEditMode(props,{
     updateRecipe()
   }, []);
   useLayoutEffect(() => {
-    props.navigation.setOptions({
-      headerTitle: props.tempRecipe.recipeJSON.title,
-    });
+    if(props.tempRecipe !== null){
+      props.navigation.setOptions({
+        headerTitle: props.tempRecipe.recipeJSON.title,
+      });
+    } else {
+      props.navigation.setOptions({
+        headerTitle: "Add Recipe",
+      });
+    }
   });
 
   const [ingredients, setIngredients] = useState([]);
@@ -125,6 +131,7 @@ export default function AddRecipeEditMode(props,{
       setInstructionValue("");
     }
   }
+
 
 
   if (props.tempRecipe !== null) {
@@ -236,7 +243,7 @@ export default function AddRecipeEditMode(props,{
   } else {
     return (
         <View style={{overflow: "scroll",height: "100%"}}>
-          <ImageBackgroundComp styles={styles.image}/>
+          <ImageBackgroundComp styles={styles.image} recipeTitle={"New Recipe"} />
           <View style={styles.textContainer}>
             <View style={styles.textRow}>
               <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() => changeMode("ingredients")}>
