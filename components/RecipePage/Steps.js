@@ -1,12 +1,15 @@
 import React from "react";
 import { Text, View, } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { FlatList } from "react-native";
 
 export default function Steps({text}){
+    console.log(text)
     return (
     <View>
         <Text style={{fontSize: 20, fontWeight:"bold",marginBottom: 10}}>Zubereitung</Text>
-        <Text>{text}</Text>
+        <FlatList data = {text}
+            renderItem={({item}) => <Text>{item.instruction}</Text>}
+        />
     </View>
     )
 }

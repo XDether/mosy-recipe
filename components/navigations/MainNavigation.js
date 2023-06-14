@@ -8,11 +8,16 @@ import RecipePage from "../pages/RecipePage";
 import Recipe from "../models/Recipe";
 import storage from "../helpers/Storage";
 import colors from "../constants/colors";
+import { TouchableOpacity } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function MainNavigation ()
 {
   const [tempRecipe, setTempRecipe] = useState({link:""})
   const Stack = createNativeStackNavigator();
+
 
   useEffect(() => {
     const createTestData = async ()=>
@@ -22,31 +27,40 @@ export default function MainNavigation ()
         {amount:'3',ingredient:'beef'},
         {amount:'3',ingredient:'Salt'}
       ]
-      ,'Just Put that salt on da beef','a beefy recipe',"3hrs","3port")])
+      ,[{instruction:'Just Put that salt on da beef'}],'a beefy recipe',"3hrs","3port")])
     }
     createTestData();
   }, []);
+  const navigation = useNavigation();
+  const BackButton = () =>{
+    return(
+    <TouchableOpacity 
+      style={{marginRight: 10}}
+      onPress={()=>{navigation.navigate("TabScreen")}}
+    >
+      <Ionicons name="arrow-back-outline" size={24}/>
+    </TouchableOpacity>
+    )
+  }
 
   return(
-    <NavigationContainer theme={{ colors: {...DefaultTheme.colors , background : colors.background}}}>
-      <Stack.Navigator initialRouteName='EditPages' >
+
+      <Stack.Navigator initialRouteName='EditPages' screenOptions={{headerLeft: BackButton}}>
 
           <Stack.Screen name = "TabScreen" options={{headerShown : false}}>
             {(props) => <TabNavigation {...props}/>}
           </Stack.Screen>
 
-          <Stack.Screen name="AddRecipeOverview" options={{ headerStyle:{backgroundColor: colors.primary}}}>
+          <Stack.Screen name="AddRecipeOverview" options={{ headerStyle:{backgroundColor: colors.primary}, title: "Neues Rezept"}}>
             {(props) => <AddRecipeOverview {...props} setTempRecipe={ setTempRecipe } />}
           </Stack.Screen>
 
-          <Stack.Screen name="AddRecipeEditMode" options={{ headerStyle:{backgroundColor: colors.primary}}}>
+          <Stack.Screen name="AddRecipeEditMode" options={{ headerStyle:{backgroundColor: colors.primary}, headerShown: false}}>
             {(props) => <AddRecipeEditMode {...props} tempRecipe={tempRecipe} setTempRecipe = {setTempRecipe} />}
           </Stack.Screen>
 
-          <Stack.Screen name="RecipePage" options={{ headerStyle:{backgroundColor: colors.primary}}}>
+          <Stack.Screen name="RecipePage" options={{ headerStyle:{backgroundColor: colors.primary}, title:"Rezept"}}>
             {(props) => <RecipePage {...props}/>}
           </Stack.Screen>
-          
-      </Stack.Navigator>
-    </NavigationContainer>)
+      </Stack.Navigator>)
 }

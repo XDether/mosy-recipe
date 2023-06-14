@@ -102,7 +102,7 @@ export default function AddRecipeEditMode(props,{
   const saveDataToRecipe = async () => {
     const allRecipes = await storage.getData();
     const newID = storage.generateIDFromData(allRecipes);
-    await storage.createData([new Recipe(newID, "categoryID", "TestTitle", ingredients, instructions, "desc", 1, 1)]);
+    await storage.addData(new Recipe(newID, "categoryID", "TestTitle", ingredients, instructions, "desc", 1, 1));
     props.navigation.navigate("RecipePage", {id: newID});
   }
 

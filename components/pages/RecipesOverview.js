@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
-  Text,
-  View,
-  Image,
   FlatList,
   SafeAreaView,
   StyleSheet,
   Dimensions,
 } from "react-native";
 
-import colors from "../constants/colors";
 import Tile from "../recipesOverview/Tile";
 import storage from "../helpers/Storage";
 
@@ -28,16 +24,21 @@ export default function RecipesOverview({navigation}) {
       description: "This is recipe 3",
     },
   ]);
-  useEffect(() => {
-    const UpdateRecipe = async()=>
-    {
-      const data = await storage.getData();
-      if(data != null){
+
+  const UpdateRecipe = async()=>
+  {
+    const data = await storage.getData();
+    if(data != null){
         setRecipe(data);
-      }
     }
-    UpdateRecipe()
-  }, []);
+  }
+
+  //UpdateRecipe();
+  useEffect(()=>{
+    navigation.addListener("focus",()=>{
+      UpdateRecipe()
+    });
+  },[navigation])
 
   const gridFormat = (recipeArray, colums) => {
     if (recipeArray.length % 2 !== 0) {
