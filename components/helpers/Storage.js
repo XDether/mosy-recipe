@@ -45,6 +45,23 @@ const addData = async (value) => {
   }
 }
 
+const removeData = async (id) => {
+  try {
+    const data = await getData()
+    const newData = []
+    for(let item of data)
+    {
+      if(id != item.id){
+        newData.push(item)
+      }
+    }
+    console.log(newData)
+    createData(newData)
+  } catch(e) {
+    // error reading value
+  }
+}
+
 const mergeData = async (value) => 
 {
   try {
@@ -76,4 +93,4 @@ const generateIDFromData = (data) =>
   }
 }
 
-export default {getData, createData, mergeData, addData, getDataWithId, generateIDFromData}
+export default {getData, createData, mergeData, addData,removeData, getDataWithId, generateIDFromData}
