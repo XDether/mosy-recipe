@@ -149,7 +149,6 @@ function getChefkochData(link, setIsLoading) {
             ingredients: recipeIngredients,
             instructions: recipeInstructions,
           };
-
           resolve(recipeJSON);
     } catch (error) {
       console.log(error);

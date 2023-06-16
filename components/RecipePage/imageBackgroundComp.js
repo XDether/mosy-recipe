@@ -1,8 +1,10 @@
 import React from "react";
 import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
 import Ionicon from "@expo/vector-icons/Ionicons";
-
-export default function ImageBackgroundComp({styles}){
+import storage from "../helpers/Storage";
+import { useNavigation } from "@react-navigation/native";
+export default function ImageBackgroundComp({styles, onID}){
+    const navigation = useNavigation()
     return (
     <View style={styles.imageContainer}>
         <ImageBackground
@@ -10,7 +12,10 @@ export default function ImageBackgroundComp({styles}){
           resizeMode="cover"
           source={require("../../assets/black_image.jpg")}
         >
-          <TouchableOpacity style = {{position:"absolute", top:10, right: 10}}>
+          <TouchableOpacity style = {{position:"absolute", top:10, right: 10}} onPress={async()=>{
+            await storage.removeData(onID)
+            navigation.navigate("Recipes")
+           }}>
               <Ionicon name="trash" color="white" size={24}></Ionicon>
           </TouchableOpacity>
         
