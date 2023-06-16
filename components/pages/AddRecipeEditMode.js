@@ -37,6 +37,11 @@ export default function AddRecipeEditMode(props,{
   const [titleValue, setTitleValue] = useState("");
   const [instructions, setInstructions] = useState([]);
   const [instructionValue, setInstructionValue] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [portionSize, setPortionSize] = useState(1);
+  const [prepTime, setPrepTime] = useState("");
+
 
 
   const [editIngredient, setEditIngredient] = useState("");
@@ -73,6 +78,10 @@ export default function AddRecipeEditMode(props,{
     }
   });
 
+  const changeTitle = (text) => {
+    setTitleValue(text);
+  }
+
   const [ingredients, setIngredients] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -88,6 +97,20 @@ export default function AddRecipeEditMode(props,{
     setIsModalVisible(false);
   };
 
+  const recalculatePortionSize = (newPortionSize) => {
+    if (newPortionSize === 0 || isNaN(newPortionSize)) {
+      return
+    } else{
+      const updatedIngredients = [...ingredients];
+      updatedIngredients.forEach((ingredient) => {
+        ingredient.amount = (ingredient.amount / portionSize) * newPortionSize;
+      });
+      setIngredients(updatedIngredients);
+      setPortionSize(newPortionSize);
+    }
+
+  }
+
   const handleSave = () => {
     const updatedIngredient = [...ingredients];
     updatedIngredient[editIndex] = {
@@ -102,8 +125,16 @@ export default function AddRecipeEditMode(props,{
   const saveDataToRecipe = async () => {
     const allRecipes = await storage.getData();
     const newID = storage.generateIDFromData(allRecipes);
-    await storage.addData(new Recipe(newID, "categoryID", "TestTitle", ingredients, instructions, "desc", 1, 1));
-    props.navigation.navigate("RecipePage", {id: newID});
+    if (props.tempRecipe !== null) {
+      await storage.addData(new Recipe(newID, props.tempRecipe.recipeJSON.category, props.tempRecipe.recipeJSON.title, props.tempRecipe.recipeJSON.ingredients,  props.tempRecipe.recipeJSON.instructions,
+          props.tempRecipe.recipeJSON.description,  props.tempRecipe.recipeJSON.portionSize, props.tempRecipe.recipeJSON.time));
+      props.navigation.navigate("RecipePage", {id: newID});
+    } else{
+      await storage.addData(new Recipe(newID, category, titleValue, ingredients, instructions, description, portionSize, prepTime));
+      props.navigation.navigate("RecipePage", {id: newID});
+    }
+
+
   }
 
   const addIngredient = () => {
@@ -122,12 +153,9 @@ export default function AddRecipeEditMode(props,{
 
   const addInstructions = () => {
     if (instructionValue !== "") {
-      const newInstruction = {
-        instruction: instructionValue,
-      };
-      const updatedInstruction = [...instructions, newInstruction];
+      const updatedInstruction = [...instructions, instructionValue];
+      console.log(updatedInstruction);
       setInstructions(updatedInstruction);
-      console.log(instructionValue);
       setInstructionValue("");
     }
   }
@@ -243,7 +271,7 @@ export default function AddRecipeEditMode(props,{
   } else {
     return (
         <View style={{overflow: "scroll",height: "100%"}}>
-          <ImageBackgroundComp styles={styles.image} recipeTitle={"New Recipe"} />
+          <ImageBackgroundComp styles={styles.image} recipeTitle={titleValue} setRecipeTitle={changeTitle} />
           <View style={styles.textContainer}>
             <View style={styles.textRow}>
               <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() => changeMode("ingredients")}>
@@ -258,11 +286,12 @@ export default function AddRecipeEditMode(props,{
                   <View style={styles.iconContainer}>
                     <View style={{padding: 5}}>
                       <Ionicons name="people-outline" size={30} color="black"/>
-                      <Text>Portionen</Text>
+                      <TextInput style={{padding: 5, textAlign: 'center'}} keyboardType={"numeric"} value={portionSize.toString()} onChangeText={(text) => recalculatePortionSize(parseInt(text))} ></TextInput>
+
                     </View>
-                    <View style={{padding: 5}}>
+                    <View style={{padding: 5, alignItems : 'center'}}>
                       <Ionicons name="time-outline" size={30} color="black"/>
-                      <Text>Zeit</Text>
+                      <TextInput style={{padding: 5, textAlign: 'center'}} placeholder={"insert time"} value={prepTime} onChangeText={(text) => setPrepTime(text)} ></TextInput>
                     </View>
                     <View style={{padding: 5}}>
                       <Ionicons name="heart-outline" size={30} color="black"/>
@@ -281,10 +310,12 @@ export default function AddRecipeEditMode(props,{
                           padding: 5,
                         }}
                         placeholder="Kategorie"
+                        value={category}
+                        onChangeText={(text) => setCategory(text)}
                     />
-                    <TouchableOpacity style={{padding: 10}}>
-                      <Ionicons name="pencil" size={30} color="black"/>
-                    </TouchableOpacity>
+                    {/*<TouchableOpacity style={{padding: 10}}>*/}
+                    {/*  <Ionicons name="pencil" size={30} color="black"/>*/}
+                    {/*</TouchableOpacity>*/}
                   </View>
                   {/* Zutaten View */}
                   <View style={styles.ingredientsContainer}>
@@ -528,7 +559,7 @@ export default function AddRecipeEditMode(props,{
                                     justifyContent: 'space-between',
                                   }}
                                         key={index}>
-              <Text style={{paddingBottom:10, fontSize: 15, maxWidth: '80%'}}> {instruction.instruction}</Text>
+              <Text style={{paddingBottom:10, fontSize: 15, maxWidth: '80%'}}> {instruction}</Text>
 
                                   <TouchableOpacity style={{alignItems: 'center'}} onPress={() => {
                                     const updatedInstructions = [...instructions];
