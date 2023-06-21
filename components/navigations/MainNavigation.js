@@ -28,7 +28,7 @@ export default function MainNavigation ()
         {amount:'3',ingredient:'Salt'}
       ]
       ,['Just Put that salt on da beef'],'a beefy recipe',"3hrs","3port"),
-      new Recipe(1,'Food','Beef',
+      new Recipe(1,'Food','Yerkey',
       [
         {amount:'2',ingredient:'beef'},
         {amount:'3',ingredient:'Salt'}
