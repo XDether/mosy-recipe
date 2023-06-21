@@ -80,7 +80,7 @@ export default function RecipesOverview({navigation}) {
       for(let item of fullRecipe)
       {
         console.log(item.title)
-        if(item.title <= value){
+        if(item.title === value){
           tmpArray.push(item)
         }
       }
