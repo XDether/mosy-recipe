@@ -361,12 +361,9 @@ export default function AddRecipeEditMode(props,{
                         })}
                       </Picker>
                     </View>
-                    <View>
-                      <SafeAreaView style={{height: "79%", padding: 10}}>
-                        <ScrollView
-                            style={{paddingBottom: 5}}
-                            contentContainerStyle={{marginBottom: 5}}
-                        >
+                    <SafeAreaView style={{padding:5}}>
+                      <ScrollView style={{height: "65%",paddingBottom: 5}}
+                      contentContainerStyle={{marginBottom: 5}}>
                           {ingredients.map((ingredient, index) => {
                             return (
                                 <View
@@ -528,10 +525,9 @@ export default function AddRecipeEditMode(props,{
                             );
                           })}
                         </ScrollView>
-                      </SafeAreaView>
+                        </SafeAreaView>
                     </View>
                   </View>
-                </View>
             ) : (
                 <View style={{paddingTop: 30, paddingLeft: 10}}>
                   <View style={{flexDirection: "column"}}>
@@ -548,18 +544,18 @@ export default function AddRecipeEditMode(props,{
                     </View>
 
                     {instructions.length > 0 ? (
-                        <SafeAreaView style={{height: "100%", padding: 20}}>
-                          <ScrollView style={{paddingBottom: 5}}
+                        <SafeAreaView style={{padding: 20}}>
+                          <ScrollView style={{paddingBottom: 5, height: "85%"}}
                                       contentContainerStyle={{marginBottom: 5}}>
                             {instructions.map((instruction, index) => {
                               return (
                                   <View style={{
                                     width: "80%",
-                                    flexDirection: "row",
+                                    flexDirection: "row",paddingBottom: 20,
                                     justifyContent: 'space-between',
                                   }}
                                         key={index}>
-              <Text style={{paddingBottom:10, fontSize: 15, maxWidth: '80%'}}> {instruction}</Text>
+              <Text style={{fontSize: 15, maxWidth: '80%'}}> {instruction}</Text>
 
                                   <TouchableOpacity style={{alignItems: 'center'}} onPress={() => {
                                     const updatedInstructions = [...instructions];

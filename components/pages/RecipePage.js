@@ -31,7 +31,7 @@ export default function RecipePage(props){
         }
         UpdateRecipe()
     }, []);    
-
+    console.log(data)
     return (
     <View style={{display:"flex"}}>
         <ImageBackgroundComp styles={styles} onID ={onID}/>
@@ -45,7 +45,7 @@ export default function RecipePage(props){
               </TouchableOpacity>
           </View>
           <Iconbar portions={data.portions} time={data.time}/>
-          <Category name = {data.title}/>
+          <Category name = {data.categoryID}/>
           {mode === "ingredients"? <IngredientList ingredients={data.ingredients}/>:<Steps text={data.instructions}/>}
         </View>
     </View>)
