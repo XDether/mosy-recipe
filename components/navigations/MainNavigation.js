@@ -27,13 +27,13 @@ export default function MainNavigation ()
         {amount:'3',ingredient:'beef'},
         {amount:'3',ingredient:'Salt'}
       ]
-      ,[{instruction:'Just Put that salt on da beef'}],'a beefy recipe',"3hrs","3port"),
-      new Recipe(1,'Food','Beef',
+      ,['Just Put that salt on da beef'],'a beefy recipe',"3hrs","3port"),
+      new Recipe(1,'Food','Yerkeys',
       [
         {amount:'2',ingredient:'beef'},
         {amount:'3',ingredient:'Salt'}
       ]
-      ,[{instruction:'Just Put that salt on da beef'}],'a beefuy recipe',"3hrs","3port")])
+      ,['Just Put that salt on da beef'],'a beefuy recipe',"3hrs","3port")])
     }
     createTestData();
   }, []);

@@ -8,9 +8,27 @@ import {
 
 import Tile from "../recipesOverview/Tile";
 import storage from "../helpers/Storage";
+import colors from "../constants/colors";
+import { TextInput } from "react-native";
+import { View } from "react-native";
 
 export default function RecipesOverview({navigation}) {
   [recipe, setRecipe] = useState([
+    {
+      id: "1",
+      description: "This is recipe 1",
+    },
+    {
+      id: "2",
+      description: "This is recipe 2",
+    },
+    {
+      id: "3",
+      description: "This is recipe 3",
+    },
+  ]);
+
+  [fullRecipe, setFullRecipe] = useState([
     {
       id: "1",
       description: "This is recipe 1",
@@ -30,13 +48,18 @@ export default function RecipesOverview({navigation}) {
     const data = await storage.getData();
     if(data != null){
         setRecipe(data);
+        setFullRecipe(data);
     }
   }
 
+  const [searchTerm, setSearchTerm] = useState("")
+
   //UpdateRecipe();
   useEffect(()=>{
+    console.log(searchTerm)
     navigation.addListener("focus",()=>{
       UpdateRecipe()
+      
     });
   },[navigation])
 
@@ -47,9 +70,33 @@ export default function RecipesOverview({navigation}) {
     return recipeArray;
   };
 
+  const handleSearch = (value)=>
+  {
+    if(value === "" || value === null)
+    {
+      setRecipe(fullRecipe)
+    }else{
+      const tmpArray = new Array();
+      for(let item of fullRecipe)
+      {
+        console.log(item.title)
+        if(item.title === value){
+          tmpArray.push(item)
+        }
+      }
+      setRecipe(tmpArray)
+    }
+  }
 
   return (
     <SafeAreaView style={style.container}>
+      <View style={{marginVertical: 10, marginHorizontal: (Dimensions.get("window").width * 0.1) / 4}}>
+        <TextInput
+          style={{ height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
+          placeholder="Search"
+          onChangeText={(value) =>{ handleSearch(value)} }
+        />
+      </View>
       <FlatList
         data={gridFormat(recipe, 2)}
         horizontal={false}
@@ -65,18 +112,15 @@ export default function RecipesOverview({navigation}) {
 
 const style = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "rgb(245, 196, 249)",
   },
   column: {
-    flex: 1,
   },
   invisible: {
     backgroundColor: "transparent",
   },
   columnWrapperStyle: {
     marginVertical: (Dimensions.get("window").width * 0.1) / 4,
-    flex: 1,
     justifyContent: "space-around",
     height: Dimensions.get("window").width / 2,
   },

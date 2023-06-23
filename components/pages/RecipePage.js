@@ -9,7 +9,7 @@ import Category from "../RecipePage/Category";
 import IngredientList from "../RecipePage/ingredientList/IngredientList";
 import Steps from "../RecipePage/Steps";
 
-export default function RecipePage(props){
+export default function RecipePage(props,{navigation}){
     [data,setData] = useState([]);
     const [mode, setMode] = useState("ingredients");
     [onID, setOnID] = useState("3");
@@ -26,12 +26,15 @@ export default function RecipePage(props){
             if(data != null){
               setData(data);
               setOnID(props.route.params.id);
+              props.navigation.setOptions({
+                title: data.title === '' ? 'No title' : data.title,
+              });
             }
           }
         }
+        
         UpdateRecipe()
     }, []);    
-    console.log(data)
     return (
     <View style={{display:"flex"}}>
         <ImageBackgroundComp styles={styles} onID ={onID}/>
