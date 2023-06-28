@@ -24,17 +24,17 @@ export default function CategoryScreen(props){
         }
         return categoryArray;
       };
-    
 
 
 
+      
     return (
         <SafeAreaView style={style.container}>
             <FlatList
                 data={gridFormat(category, 2)}
                 horizontal={false}
                 numColumns={2}
-                renderItem={({ item }) => <Tile {...item} navigation={props.navigation}/>}
+                renderItem={({ item }) => <Tile {...item} navigation={props.navigation} isCategory={true}/>}
                 keyExtractor={(item) => item.id}
                 style={style.column}
                 columnWrapperStyle={style.columnWrapperStyle}

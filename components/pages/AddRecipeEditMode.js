@@ -28,6 +28,7 @@ export default function AddRecipeEditMode(props,{
   id,
   tempRecipe,
   setTempRecipe,
+  editingRecipeData
 }) {
   [data, setData] = useState([])
   const [mode, setMode] = useState("ingredients");
@@ -86,7 +87,8 @@ export default function AddRecipeEditMode(props,{
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const openModal = (index) => {
-    const selectedIngredient = ingredient[index];
+    console.log(index)
+    const selectedIngredient = ingredients[index];
     setEditIndex(index);
     setEditIngredient(selectedIngredient.ingredient);
     setEditedUnit(selectedIngredient.unit);
@@ -154,15 +156,23 @@ export default function AddRecipeEditMode(props,{
   const addInstructions = () => {
     if (instructionValue !== "") {
       const updatedInstruction = [...instructions, instructionValue];
-      console.log(updatedInstruction);
       setInstructions(updatedInstruction);
       setInstructionValue("");
     }
   }
 
+  try {
+    var editingRecipe = props.route.params.editingRecipe
+  }
+  catch (e) {
+    var editingRecipe = undefined
+  }
 
+ 
 
+  
   if (props.tempRecipe !== null) {
+    
     return (
         <View style={{overflow: "scroll",height: "100%"}}>
           <ImageBackgroundComp styles={styles.image} imageSRC={props.tempRecipe.recipeJSON.image} recipeTitle={props.tempRecipe.recipeJSON.title}/>
@@ -268,7 +278,129 @@ export default function AddRecipeEditMode(props,{
           </View>
         </View>
     );
-  } else {
+  } else if (editingRecipe !== undefined) {
+    return (
+      <View style={{overflow: "scroll",height: "100%"}}>
+          <ImageBackgroundComp styles={styles.image} recipeTitle={editingRecipe.title}/>
+          <View style={styles.textContainer}>
+            <View style={styles.textRow}>
+              <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() => changeMode("ingredients")}>
+                <Text style={styles.textSize}>Zutaten</Text>
+              </TouchableOpacity>
+              <TouchableOpacity  style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() => changeMode("steps")}>
+                <Text style={styles.textSize}>Zubereitung</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {mode === "ingredients" ? (
+              <View>
+                <View style={styles.iconContainer}>
+                  <View style={{padding: 5}}>
+                    <Ionicons name="people-outline" size={30} color="black"/>
+                    <Text style={{textAlign: 'center'}}>{editingRecipe.portionSize}</Text>
+                  </View>
+                  <View style={{padding: 5}}>
+                    <Ionicons name="time-outline" size={30} color="black"/>
+                    <Text style={{textAlign: 'center'}}>{editingRecipe.time}</Text>
+                  </View>
+                  <View style={{padding: 5}}>
+                    <Ionicons name="heart-outline" size={30} color="black"/>
+                  </View>
+                </View>
+                {/* kategorie View */}
+                <View style={styles.categorieContainer}>
+                  <Text style={styles.textSize}>Kategorie:</Text>
+                  <Text style={styles.textSize}>{editingRecipe.categoryID}</Text>
+                  <TouchableOpacity style={{padding:10}}>
+                    <Ionicons name="pencil" size={25} color="black"/>
+                  </TouchableOpacity>
+                </View>
+
+                {/* Zutaten View */}
+                <View style={styles.ingredientsContainer}>
+                  <Text style={styles.textSize}>Zutaten:</Text>
+                  <View>
+                    <SafeAreaView style={{height: "100%", padding:5}}>
+                      <ScrollView style={{paddingBottom: 5}}
+                                  contentContainerStyle={{marginBottom: 5}}>
+                        {editingRecipe.ingredients.map((ingredient, index) => {
+                          return (
+                              <View
+                                style={{
+                                  width: "100%",
+                                  flexDirection: "row",
+                                  justifyContent: "space-between",
+                                }}
+                                key={index}
+                                >
+                                <Text style={{fontSize: 20, paddingBottom: 5}}>{ingredient.amount} {ingredient.unit} {ingredient.ingredient}</Text>
+                                <TouchableOpacity onPress={() => openModal(index)}>
+                                  <Ionicons name="pencil" size={25} color="black"/>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                        onPress={() => {
+                                          console.log(...editingRecipe.ingredients)
+                                          const updatedIngredients = editingRecipe.ingredients;
+                                          updatedIngredients.splice(index, 1);
+                                          setIngredients(updatedIngredients);
+                                        }}
+                                        style={{}}
+                                    >
+                                      <Ionicons
+                                          name="trash-outline"
+                                          size={20}
+                                          color="black"
+                                      />
+                                  </TouchableOpacity>
+
+
+                              </View>
+                          )
+                        })
+                        }
+
+                      </ScrollView>
+                    </SafeAreaView>
+                  </View>
+
+                </View>
+
+              </View>
+          ) : (
+              <View>
+                <SafeAreaView style={{padding: 20}}>
+                  <Text style={styles.textSize}>{editingRecipe.instructions}</Text>
+                </SafeAreaView>
+
+              </View>
+
+
+          )}
+          <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+                backgroundColor: "pink",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingLeft: 10,
+              }}
+          >
+            <TouchableOpacity>
+              <Ionicons name="trash-outline" size={30} color="black"/>
+            </TouchableOpacity>
+
+            <Text style={styles.textSize}>Edit Mode</Text>
+            <TouchableOpacity onPress={saveDataToRecipe}>
+              <Ionicons name="checkmark-circle-outline" size={30} color="black"/>
+            </TouchableOpacity>
+          </View>
+        </View>
+    )
+  }else {
     return (
         <View style={{overflow: "scroll",height: "100%"}}>
           <ImageBackgroundComp styles={styles.image} recipeTitle={titleValue} setRecipeTitle={changeTitle} />
