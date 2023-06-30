@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View, TouchableOpacity, Button } from "react-native";
 import storage from "../helpers/Storage";
 import styles from '../styles/RecipePageStyles'
 import ImageBackgroundComp from "../RecipePage/imageBackgroundComp";
@@ -28,6 +28,9 @@ export default function RecipePage(props,{navigation}){
               setOnID(props.route.params.id);
               props.navigation.setOptions({
                 title: data.title === '' ? 'No title' : data.title,
+                headerRight: () => (
+                  <Button style={{}} title="Edit" onPress={() =>  {props.navigation.navigate('AddRecipeEditMode', {editingRecipe : data})}}/>
+                )
               });
             }
           }
