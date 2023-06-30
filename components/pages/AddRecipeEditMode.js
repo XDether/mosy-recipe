@@ -326,7 +326,7 @@ export default function AddRecipeEditMode(
             </SafeAreaView>
           </View>
         )}
-        <View
+         <View
           style={{
             position: "absolute",
             bottom: 0,
@@ -338,7 +338,7 @@ export default function AddRecipeEditMode(
             paddingLeft: 10,
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
             <Ionicons name="trash-outline" size={30} color="black" />
           </TouchableOpacity>
 
@@ -659,7 +659,6 @@ export default function AddRecipeEditMode(
                       </View>
                       <Button title="Speichern" onPress={() => {
                         const updatedInstructions = [...editingRecipe.instructions];
-                        console.log(updatedInstructions[index])
                         updatedInstructions[index] = editedInstruction;
                         editingRecipe.instructions = updatedInstructions;
                         setEditedInstruction("");
@@ -679,7 +678,7 @@ export default function AddRecipeEditMode(
             </SafeAreaView>
           </View>
         )}
-        <View
+         <View
           style={{
             position: "absolute",
             bottom: 0,
@@ -691,7 +690,7 @@ export default function AddRecipeEditMode(
             paddingLeft: 10,
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
             <Ionicons name="trash-outline" size={30} color="black" />
           </TouchableOpacity>
 
@@ -1061,7 +1060,7 @@ export default function AddRecipeEditMode(
             paddingLeft: 10,
           }}
         >
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
             <Ionicons name="trash-outline" size={30} color="black" />
           </TouchableOpacity>
 
