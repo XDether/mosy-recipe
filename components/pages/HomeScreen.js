@@ -1,16 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
-import {
-  Button,
-  Text,
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Tile from "../recipesOverview/Tile";
 import colors from "../constants/colors";
-import { PanGestureHandler } from "react-native-gesture-handler";
-export default function HomeScreen({ navigation }) {
+import storage from "../helpers/Storage";
+export default function HomeScreen() {
   [recipe, setRecipe] = useState([
     {
       id: "1",
@@ -30,16 +23,13 @@ export default function HomeScreen({ navigation }) {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    // const UpdateRecipe = async () => {
-    //   const data = await storage.getData();
-    //   if (data != null) {
-    //     setRecipe(data);
-    //   }
-    // };
-
-    // Output: Randomly shuffled array
-
-    // UpdateRecipe();
+    const UpdateRecipe = async () => {
+      const data = await storage.getData();
+      if (data != null) {
+        setRecipe(data);
+      }
+    };
+    UpdateRecipe();
 
     const length = recipe.length;
     setShuffledArray(
@@ -51,10 +41,10 @@ export default function HomeScreen({ navigation }) {
 
   const handleButtonPress = () => {
     const index = shuffledArray[counter] - 1;
-    console.log(index);
     setRandomId(recipe[index].id);
     setCounter((prev) => {
       const next = (prev + 1) % recipe.length;
+
       return next;
     });
   };
