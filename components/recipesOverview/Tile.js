@@ -3,8 +3,12 @@ import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { images } from "../constants/images";
 import colors from "../constants/colors";
 export default function Tile({ id, description, invisible, navigation }) {
+  // const getObjectById = (id) => {
+  //   return data.find((obj) => obj.id === id);
+  // };
+
   const onPressHandler = () => {
-    navigation.navigate('RecipePage');
+    //navigation.navigate("RecipePage");
   };
   if (!invisible) {
     return (

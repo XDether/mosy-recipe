@@ -13,7 +13,7 @@ import colors from "../constants/colors";
 import Tile from "../recipesOverview/Tile";
 import storage from "../helpers/Storage";
 
-export default function RecipesOverview({navigation}) {
+export default function RecipesOverview({ navigation }) {
   [recipe, setRecipe] = useState([
     {
       id: "1",
@@ -29,23 +29,21 @@ export default function RecipesOverview({navigation}) {
     },
   ]);
   useEffect(() => {
-    const UpdateRecipe = async()=>
-    {
+    const UpdateRecipe = async () => {
       const data = await storage.getData();
-      if(data != null){
+      if (data != null) {
         setRecipe(data);
       }
-    }
-    UpdateRecipe()
+    };
+    UpdateRecipe();
   }, []);
 
-  const gridFormat = (recipeArray, colums) => {
+  const gridFormat = (recipeArray) => {
     if (recipeArray.length % 2 !== 0) {
       recipeArray.push({ ...recipeArray[0], invisible: true });
     }
     return recipeArray;
   };
-
 
   return (
     <SafeAreaView style={style.container}>
@@ -53,7 +51,7 @@ export default function RecipesOverview({navigation}) {
         data={gridFormat(recipe, 2)}
         horizontal={false}
         numColumns={2}
-        renderItem={({ item }) => <Tile {...item} navigation={navigation}/>}
+        renderItem={({ item }) => <Tile {...item} />}
         keyExtractor={(item) => item.id}
         style={style.column}
         columnWrapperStyle={style.columnWrapperStyle}
