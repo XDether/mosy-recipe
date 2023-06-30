@@ -1,64 +1,63 @@
-import React, {useState} from "react";
-import { Text, View, FlatList, StyleSheet,  Dimensions, } from "react-native";
-
-import Tile from "../recipesOverview/Tile";
-import storage from "../helpers/Storage";
+import React, {useEffect, useState} from "react";
+import { Text } from "react-native";
+import { Dimensions } from "react-native";
+import { TouchableOpacity } from "react-native";
+import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import colors from "../constants/colors";
+import Storage from "../helpers/Storage";
 
-export default function CategoryScreen(props){
+export default function CategoryScreen({navigation}){
     [category, setCategory] = useState([
         {
-            id: "Fleisch",
-            description: "Fleisch",
+            categoryID: "Fleisch",
         },
         {
-            id: "Fisch",
-            description: "Fisch",
+            categoryID: "Fisch",
         },
     ]);
 
-
-    const gridFormat = (categoryArray, colums) => {
-        if (categoryArray.length % 2 !== 0) {
-            categoryArray.push({ ...categoryArray[0], invisible: true });
+    const UpdateRecipe = async()=>
+    {
+      const data = await Storage.getData();
+      if(data != null){
+        const unique = [];
+        for (const item of data) {
+          const isDuplicate = unique.find((obj) => obj.categoryID === item.categoryID);
+          if (!isDuplicate) {
+            unique.push(item);
+          }
         }
-        return categoryArray;
-      };
+        //console.log(unique)
+        setCategory(unique)
+      }
+    }
 
+    useEffect(()=>{
+      UpdateRecipe()
+    },[navigation])
 
+    function CategoryTile({name}) {
+      return (
+      <TouchableOpacity onPress={()=>{navigation.navigate("Recipes",{categoryID: name})}} >
+        <Text style={{fontSize:16, backgroundColor:colors.accent, borderRadius: 50, paddingHorizontal: 10}}>
+            {name}
+        </Text>
+      </TouchableOpacity>)
+    }
 
-      
     return (
-        <SafeAreaView style={style.container}>
-            <FlatList
-                data={gridFormat(category, 2)}
-                horizontal={false}
-                numColumns={2}
-                renderItem={({ item }) => <Tile {...item} navigation={props.navigation} isCategory={true}/>}
-                keyExtractor={(item) => item.id}
-                style={style.column}
-                columnWrapperStyle={style.columnWrapperStyle}
-            />
+        <SafeAreaView>
+          <FlatList 
+            numColumns={3}
+            data = {category}
+            renderItem={({item}) => <CategoryTile name = {item.categoryID}/>}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
+              margin: (Dimensions.get("window").width * 0.3) / 4
+            }}
+          />
+
         </SafeAreaView>
     )
-}
-
-const style = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "rgb(245, 196, 249)",
-    },
-    column: {
-      flex: 1,
-    },
-    invisible: {
-      backgroundColor: "transparent",
-    },
-    columnWrapperStyle: {
-      marginVertical: (Dimensions.get("window").width * 0.1) / 4,
-      flex: 1,
-      justifyContent: "space-around",
-      height: Dimensions.get("window").width / 2,
-    },
-  });
-  
+} 

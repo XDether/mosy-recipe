@@ -2,14 +2,13 @@ import React from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { images } from "../constants/images";
 import colors from "../constants/colors";
-import RecipesOverview from "../pages/RecipesOverview";
-export default function Tile({ id,title, description, invisible, navigation, isCategory }) {
-  
+
+export default function Tile({ id,title, description, invisible, navigation, isCategory }) {  
   const onPressHandler = () => {
     navigation.navigate('RecipePage', {id:id});
   };
   const onPressHandlerCategory = () => {
-    navigation.navigate('Recipes', {isCategory:isCategory, categoryID : id})
+    navigation.navigate('Recipes', {isCategory: isCategory, categoryID : id})
 
     //here we need to pass the category id to the recipes page
     // but it crashed / has not the correct information??

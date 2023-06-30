@@ -11,8 +11,9 @@ import storage from "../helpers/Storage";
 import colors from "../constants/colors";
 import { TextInput } from "react-native";
 import { View } from "react-native";
+import Category from "../RecipePage/Category";
 
-export default function RecipesOverview({navigation}) {
+export default function RecipesOverview({navigation, route}) {
   [recipe, setRecipe] = useState([
     {
       id: "1",
@@ -43,6 +44,8 @@ export default function RecipesOverview({navigation}) {
     },
   ]);
 
+  []
+
   const UpdateRecipe = async()=>
   {
     const data = await storage.getData();
@@ -50,18 +53,31 @@ export default function RecipesOverview({navigation}) {
         setRecipe(data);
         setFullRecipe(data);
     }
+
+    if(route.params)
+    {
+      console.log("did")
+      const tmpArray = new Array();
+
+      for(let item of fullRecipe)
+      {
+        if(item.categoryID === route.params.categoryID){
+          tmpArray.push(item)
+        }
+      }
+      setRecipe(tmpArray)
+    }
   }
 
   const [searchTerm, setSearchTerm] = useState("")
 
   //UpdateRecipe();
   useEffect(()=>{
-    console.log(searchTerm)
-    navigation.addListener("focus",()=>{
-      UpdateRecipe()
-      
-    });
-  },[navigation])
+    UpdateRecipe()
+    /*navigation.addListener("focus",()=>{
+      UpdateRecipe(route.params)
+    });*/
+  },[navigation, route.params])
 
   const gridFormat = (recipeArray, colums) => {
     if (recipeArray.length % 2 !== 0) {
@@ -79,7 +95,6 @@ export default function RecipesOverview({navigation}) {
       const tmpArray = new Array();
       for(let item of fullRecipe)
       {
-        console.log(item.title)
         if(item.title === value){
           tmpArray.push(item)
         }
