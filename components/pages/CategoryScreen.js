@@ -41,7 +41,6 @@ export default function CategoryScreen({navigation, dataSet}){
             margin: (Dimensions.get("window").width * 0.3) / 4
           }}
         />
-
       </SafeAreaView>
   )
 } 
