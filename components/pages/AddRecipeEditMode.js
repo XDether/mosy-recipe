@@ -141,9 +141,11 @@ export default function AddRecipeEditMode(
   };
 
   const saveDataToRecipe = async () => {
-    const allRecipes = await storage.getData();
-    const newID = storage.generateIDFromData(allRecipes);
     if (props.tempRecipe !== null) {
+      const allRecipes = await storage.getData();
+      const newID = storage.generateIDFromData(allRecipes);
+      console.log(allRecipes);
+      var lastID = props.tempRecipe.recipeJSON.id;
       await storage.addData(
         new Recipe(
           newID,
@@ -157,7 +159,9 @@ export default function AddRecipeEditMode(
         )
       );
       props.navigation.navigate("RecipePage", { id: newID });
+      //await storage.removeData(lastID);
     } else if (editingRecipe !== undefined) {
+    
       var lastID = editingRecipe.id;
       await storage.addData(
         new Recipe(
@@ -174,6 +178,8 @@ export default function AddRecipeEditMode(
       props.navigation.navigate("RecipePage", { id: newID });
       await storage.removeData(lastID);
     } else {
+      const allRecipes = await storage.getData();
+      const newID = storage.generateIDFromData(allRecipes);
       await storage.addData(
         new Recipe(
           newID,
@@ -187,6 +193,7 @@ export default function AddRecipeEditMode(
         )
       );
       props.navigation.navigate("RecipePage", { id: newID });
+      await storage.removeData(lastID);
     }
   };
 
@@ -285,9 +292,9 @@ export default function AddRecipeEditMode(
             <View style={styles.ingredientsContainer}>
               <Text style={styles.textSize}>Zutaten:</Text>
               <View>
-                <SafeAreaView style={{ height: "100%", padding: 5 }}>
+                <SafeAreaView style={{ padding: 1}}>
                   <ScrollView
-                    style={{ paddingBottom: 5 }}
+                    style={{height: "85%", paddingBottom: 5 }}
                     contentContainerStyle={{ marginBottom: 5 }}
                   >
                     {props.tempRecipe.recipeJSON.ingredients.map(
@@ -320,9 +327,30 @@ export default function AddRecipeEditMode(
         ) : (
           <View>
             <SafeAreaView style={{ padding: 20 }}>
-              <Text style={styles.textSize}>
-                {props.tempRecipe.recipeJSON.instructions}
-              </Text>
+              <ScrollView style={{ height: "85%"}}>
+                {props.tempRecipe.recipeJSON.instructions.map(
+                  (instruction, index) => {
+                    return (
+                      <View
+
+                        style={{
+                          width: "100%",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                        key={index}
+                      >
+                        <Text style={{ fontSize: 20, paddingBottom: 5 }}>
+                          {instruction}
+                        </Text>
+                        <TouchableOpacity onPress={() => openModal(index)}>
+                          <Ionicons name="pencil" size={25} color="black" />
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  }
+                )}
+              </ScrollView>
             </SafeAreaView>
           </View>
         )}
@@ -350,6 +378,7 @@ export default function AddRecipeEditMode(
       </View>
     );
   } else if (editingRecipe !== undefined) {
+
     return (
       <View style={{ overflow: "scroll", height: "100%" }}>
         <ImageBackgroundComp
@@ -790,7 +819,7 @@ export default function AddRecipeEditMode(
                       alignContent: "center",
                     }}
                   >
-                    <Ionicons name="pencil" size={25} color="black" />
+                    <Ionicons name="add-circle-outline" size={25} color="black" />
                   </TouchableOpacity>
                   <TextInput
                     style={{
@@ -992,7 +1021,7 @@ export default function AddRecipeEditMode(
               <View style={{ flexDirection: "column" }}>
                 <View style={{ flexDirection: "row" }}>
                   <TouchableOpacity onPress={addInstructions}>
-                    <Ionicons name="pencil" size={25} color="black" />
+                    <Ionicons name="add-circle-outline" size={25} color="black" />
                   </TouchableOpacity>
                   <TextInput
                     value={instructionValue}
