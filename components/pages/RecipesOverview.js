@@ -13,74 +13,34 @@ import { TextInput } from "react-native";
 import { View } from "react-native";
 import Category from "../RecipePage/Category";
 
-export default function RecipesOverview({navigation, route}) {
-  [recipe, setRecipe] = useState([
-    {
-      id: "1",
-      description: "This is recipe 1",
-    },
-    {
-      id: "2",
-      description: "This is recipe 2",
-    },
-    {
-      id: "3",
-      description: "This is recipe 3",
-    },
-  ]);
-
-  [fullRecipe, setFullRecipe] = useState([
-    {
-      id: "1",
-      description: "This is recipe 1",
-    },
-    {
-      id: "2",
-      description: "This is recipe 2",
-    },
-    {
-      id: "3",
-      description: "This is recipe 3",
-    },
-  ]);
-
-  []
-
-  const UpdateRecipe = async()=>
-  {
-    const data = await storage.getData();
-    if(data != null){
-        setRecipe(data);
-        setFullRecipe(data);
-    }
-
-    if(route.params)
-    {
-      try{
-        const tmpArray = new Array();
-        setSearchTerm(route.params.categoryID)
-        for(let item of fullRecipe)
-        {
-          if(item.categoryID === route.params.categoryID){
-            tmpArray.push(item)
-          }
-        }
-        setRecipe(tmpArray)
-      }catch(e)
-      {
-        console.error(e)
-      }
-    }
-  }
+export default function RecipesOverview({navigation, route, dataSet}) {
+  [recipe, setRecipe] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("")
 
   //UpdateRecipe();
   useEffect(()=>{
-    UpdateRecipe()
-    /*navigation.addListener("focus",()=>{
-      UpdateRecipe(route.params)
-    });*/
+  if(dataSet != null){
+      setRecipe(dataSet);
+  }
+
+  if(route.params)
+  {
+    try{
+      const tmpArray = new Array();
+      setSearchTerm(route.params.categoryID)
+      for(let item of dataSet)
+      {
+        if(item.categoryID === route.params.categoryID){
+          tmpArray.push(item)
+        }
+      }
+      setRecipe(tmpArray)
+    }catch(e)
+    {
+      console.error(e)
+    }
+    }
   },[navigation, route.params])
 
   const gridFormat = (recipeArray, colums) => {
@@ -94,12 +54,13 @@ export default function RecipesOverview({navigation, route}) {
   {
     if(value === "" || value === null)
     {
-      setRecipe(fullRecipe)
+      setRecipe(dataSet)
     }
+
     else
     {
       const tmpArray = new Array();
-      for(let item of fullRecipe)
+      for(let item of dataSet)
       {
         if(item.title.includes(value)){
           tmpArray.push(item)

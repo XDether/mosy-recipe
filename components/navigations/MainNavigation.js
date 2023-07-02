@@ -16,6 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function MainNavigation ()
 {
   const [tempRecipe, setTempRecipe] = useState({link:""})
+  const [dataSet, setDataSet] = useState([]);
   const Stack = createNativeStackNavigator();
 
 
@@ -40,9 +41,15 @@ export default function MainNavigation ()
         {amount:'3',ingredient:'Saasdlt'}
       ]
       ,['Just Put thatasd salt on da beef'],'a beefuy recipe',"3hrs","3port")])
+
+      //Sets the Data to test
+      const ROFLLMAO = await storage.getData();
+      setDataSet(ROFLLMAO);
+
     }
     createTestData();
   }, []);
+
   const navigation = useNavigation();
   const BackButton = () =>{
     return(
@@ -60,7 +67,7 @@ export default function MainNavigation ()
       <Stack.Navigator initialRouteName='EditPages' screenOptions={{headerLeft: BackButton}}>
 
           <Stack.Screen name = "TabScreen" options={{headerShown : false}}>
-            {(props) => <TabNavigation {...props}/>}
+            {(props) => <TabNavigation {...props} dataSet={dataSet}/> }
           </Stack.Screen>
 
           <Stack.Screen name="AddRecipeOverview" options={{ headerStyle:{backgroundColor: colors.primary}, title: "Neues Rezept"}}>
