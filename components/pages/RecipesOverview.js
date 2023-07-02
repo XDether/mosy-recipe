@@ -91,11 +91,17 @@ export default function RecipesOverview({navigation, route}) {
     if(value === "" || value === null)
     {
       setRecipe(fullRecipe)
-    }else{
+    }
+    else
+    {
       const tmpArray = new Array();
       for(let item of fullRecipe)
       {
-        if(item.title === value){
+        if(item.title.includes(value)){
+          tmpArray.push(item)
+        }
+
+        if(item.categoryID.includes(value)){
           tmpArray.push(item)
         }
       }
