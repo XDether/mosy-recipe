@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Tile from "../recipesOverview/Tile";
 import colors from "../constants/colors";
-import storage from "../helpers/Storage";
 export default function HomeScreen({dataSet}) {
   [recipe, setRecipe] = useState([
     {
