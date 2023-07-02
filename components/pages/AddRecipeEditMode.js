@@ -17,7 +17,6 @@ import unitData from "../partials/units";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Picker } from "@react-native-picker/picker";
 import styles from "../styles/AddRecipeEditModeStyle";
-import ImageBackgroundComp from "../addRecipeEditModeComponents/imageBackgroundComp";
 import unitJSON from "../partials/units";
 import storage from "../helpers/Storage.js";
 import Recipe from "../models/Recipe.js";
@@ -79,7 +78,11 @@ export default function AddRecipeEditMode(
   });
 
   const changeTitle = (text) => {
-    setTitleValue(text);
+    if( props.tempRecipe.rec !== null) {
+      props.tempRecipe.recipeJSON.title = text;
+    } else{
+      setTitleValue(text);
+    }
   };
 
   const [ingredients, setIngredients] = useState([]);
@@ -140,11 +143,12 @@ export default function AddRecipeEditMode(
     closeModal();
   };
 
+  // TODO! Change the tempRecipe way.. it is not good cause it always has a value -> nicht gut, irgendwas mit den ids ist auch nicht am funktionieren.
+  // muss nochmal überarbeitet werden, vielleicht so wie bei den anderen. mit dem editingRecipeData
   const saveDataToRecipe = async () => {
     if (props.tempRecipe !== null) {
       const allRecipes = await storage.getData();
       const newID = storage.generateIDFromData(allRecipes);
-      console.log(allRecipes);
       var lastID = props.tempRecipe.recipeJSON.id;
       await storage.addData(
         new Recipe(
@@ -158,8 +162,13 @@ export default function AddRecipeEditMode(
           props.tempRecipe.recipeJSON.time
         )
       );
+      props.tempRecipe = null;
+      console.log("lastID: " + lastID + " newID: " + newID);
+      if (lastID !== newID) {
+        await storage.removeData(lastID);
+      }
       props.navigation.navigate("RecipePage", { id: newID });
-      //await storage.removeData(lastID);
+
     } else if (editingRecipe !== undefined) {
     
       var lastID = editingRecipe.id;
@@ -228,11 +237,7 @@ export default function AddRecipeEditMode(
   if (props.tempRecipe !== null) {
     return (
       <View style={{ overflow: "scroll", height: "100%" }}>
-        <ImageBackgroundComp
-          styles={styles.image}
-          imageSRC={props.tempRecipe.recipeJSON.image}
-          recipeTitle={props.tempRecipe.recipeJSON.title}
-        />
+        <ImageBackgroundComponent imageSRC={props.tempRecipe.recipeJSON.image} recipeTITLE={props.tempRecipe.recipeJSON.title} changeTitle={changeTitle} />
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
             <TouchableOpacity
@@ -366,7 +371,7 @@ export default function AddRecipeEditMode(
             paddingLeft: 10,
           }}
         >
-          <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
+          <TouchableOpacity onPress={() => {props.navigation.navigate("Home")}}>
             <Ionicons name="trash-outline" size={30} color="black" />
           </TouchableOpacity>
 
@@ -381,10 +386,7 @@ export default function AddRecipeEditMode(
 
     return (
       <View style={{ overflow: "scroll", height: "100%" }}>
-        <ImageBackgroundComp
-          styles={styles.image}
-          recipeTitle={editingRecipe.title}
-        />
+        <ImageBackgroundComponent imageSRC={editingRecipe.image} recipeTITLE={editingRecipe.title} changeTitle={changeTitle}/>
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
             <TouchableOpacity
@@ -733,11 +735,7 @@ export default function AddRecipeEditMode(
   } else {
     return (
       <View style={{ overflow: "scroll", height: "100%" }}>
-        <ImageBackgroundComp
-          styles={styles.image}
-          recipeTitle={titleValue}
-          setRecipeTitle={changeTitle}
-        />
+        <ImageBackgroundComponent recipeTITLE={titleValue} changeTitle={changeTitle}/>
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
             <TouchableOpacity
@@ -1101,4 +1099,22 @@ export default function AddRecipeEditMode(
       </View>
     );
   }
+}
+const ImageBackgroundComponent = props => {
+  const [childRecipeTitle, setChildRecipeTitle] = useState("")
+  return (
+    <View>
+      <ImageBackground
+      resizeMode="cover"
+      style={{height: 200}}
+      source={{ uri: props.imageSRC }}>
+        <View style={{position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', width: "100%",backgroundColor: 'rgba(211,211,211, 0.5)', justifyContent: 'space-between'}}>
+        <TextInput style={{fontSize: 20,marginLeft: 10, color: "black", maxWidth: "85%"}} placeholder="RezeptTitel" value={childRecipeTitle} onChangeText={(text) => {setChildRecipeTitle(text);}}/>
+            <TouchableOpacity style={{marginRight: 10}} onPress={() => props.changeTitle(childRecipeTitle)} >
+              <Ionicons name="checkmark-circle-outline" size={20} color="black" />
+            </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </View>
+    );
 }

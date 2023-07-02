@@ -140,10 +140,7 @@ function getChefkochData(link, setIsLoading) {
         recipeInstructions.push($(el).text().trim());
       });
           setIsLoading(false);
-          const allRecipes = await storage.getData();
-          const newID = storage.generateIDFromData(allRecipes);
           recipeJSON = {
-            id: newID,
             title: recipeTitle,
             image: recipeImage,
             description: description,
