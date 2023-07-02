@@ -19,7 +19,7 @@ export default function CategoryScreen({navigation, dataSet}){
       }
       setCategory(unique)
     }
-  },[navigation])
+  },[navigation, dataSet])
 
   function CategoryTile({name}) {
     return (

@@ -7,11 +7,9 @@ import {
 } from "react-native";
 
 import Tile from "../recipesOverview/Tile";
-import storage from "../helpers/Storage";
 import colors from "../constants/colors";
 import { TextInput } from "react-native";
 import { View } from "react-native";
-import Category from "../RecipePage/Category";
 
 export default function RecipesOverview({navigation, route, dataSet}) {
   [recipe, setRecipe] = useState([]);
@@ -41,7 +39,7 @@ export default function RecipesOverview({navigation, route, dataSet}) {
       console.error(e)
     }
     }
-  },[navigation, route.params])
+  },[navigation, route.params, dataSet])
 
   const gridFormat = (recipeArray, colums) => {
     if (recipeArray.length % 2 !== 0) {

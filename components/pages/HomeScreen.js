@@ -33,7 +33,7 @@ export default function HomeScreen({dataSet}) {
         () => Math.random() - 0.5
       )
     );
-  }, []);
+  }, [dataSet]);
 
   const handleButtonPress = () => {
     const index = shuffledArray[counter] - 1;
