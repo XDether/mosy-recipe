@@ -56,16 +56,20 @@ export default function RecipesOverview({navigation, route}) {
 
     if(route.params)
     {
-      console.log("did")
-      const tmpArray = new Array();
-
-      for(let item of fullRecipe)
-      {
-        if(item.categoryID === route.params.categoryID){
-          tmpArray.push(item)
+      try{
+        const tmpArray = new Array();
+        setSearchTerm(route.params.categoryID)
+        for(let item of fullRecipe)
+        {
+          if(item.categoryID === route.params.categoryID){
+            tmpArray.push(item)
+          }
         }
+        setRecipe(tmpArray)
+      }catch(e)
+      {
+        console.error(e)
       }
-      setRecipe(tmpArray)
     }
   }
 
@@ -115,7 +119,13 @@ export default function RecipesOverview({navigation, route}) {
         <TextInput
           style={{ height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
           placeholder="Search"
-          onChangeText={(value) =>{ handleSearch(value)} }
+          onChangeText={(value)=>
+          {
+            handleSearch(value)
+            setSearchTerm(value)
+          }
+          }
+          value = {searchTerm}
         />
       </View>
       <FlatList
