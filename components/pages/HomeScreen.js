@@ -23,7 +23,7 @@ export default function HomeScreen({dataSet}) {
 
   useEffect(() => {
     if (dataSet != null) {
-      setRecipe(data);
+      setRecipe(dataSet);
     }
 
     const length = recipe.length;
