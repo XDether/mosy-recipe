@@ -7,13 +7,9 @@ export default function Tile({ id,title, description, invisible, navigation, isC
   const onPressHandler = () => {
     navigation.navigate('RecipePage', {id:id});
   };
+
   const onPressHandlerCategory = () => {
     navigation.navigate('Recipes', {isCategory: isCategory, categoryID : id})
-
-    //here we need to pass the category id to the recipes page
-    // but it crashed / has not the correct information??
-
-    //RecipesOverview.handleSearch(id) // this is the function from the RecipesOverview.js but it says "undefined is not a function"
   };
 
   if (!invisible) {

@@ -125,7 +125,7 @@ const addInstructions = () => {
   useEffect(() => {
     const getCurrentRecipe = async() => {
       if(props != null && props.route.params?.editingRecipe?.id != undefined){
-        console.log(editingRecipe)
+        //console.log(editingRecipe)
         const data =  await storage.getDataWithId(props.route.params.editingRecipe.id);
         if(data != null){
           setData(data);

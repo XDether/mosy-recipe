@@ -2,51 +2,42 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Tile from "../recipesOverview/Tile";
 import colors from "../constants/colors";
-export default function HomeScreen({dataSet}) {
-  [recipe, setRecipe] = useState([
-    {
-      id: "1",
-      description: "This is recipe 1",
-    },
-    {
-      id: "2",
-      description: "This is recipe 2",
-    },
-    {
-      id: "3",  
-      description: "This is recipe 3",
-    },
-  ]);
-  const [randomId, setRandomId] = useState();
-  const [shuffledArray, setShuffledArray] = useState([]);
-  const [counter, setCounter] = useState(0);
+import storage from "../helpers/Storage";
+
+export default function HomeScreen({navigation}) {
+  [fullRecipe, setFullRecipe] = useState();
+  [recipe, setRecipe] = useState({id: 0, title: "Hellyeah", description: "Nice"});
+
+  
+  async function Update() {
+    const data = storage.getData();
+    if (data != null) {
+      setFullRecipe(data);
+      setRecipe(data[0]);
+    }
+  }
 
   useEffect(() => {
-    if (dataSet != null) {
-      setRecipe(dataSet);
-    }
-
-    const length = recipe.length;
-    setShuffledArray(
-      Array.from({ length }, (_, index) => index + 1).sort(
-        () => Math.random() - 0.5
-      )
-    );
-  }, [dataSet]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      Update();
+    });
+    return unsubscribe;
+  }, []);
 
   const handleButtonPress = () => {
-    const index = shuffledArray[counter] - 1;
-    setRandomId(recipe[index].id);
-    setCounter((prev) => {
-      const next = (prev + 1) % recipe.length;
-
-      return next;
-    });
+    const index = Math.floor(Math.random() * fullRecipe.length)+1;
+    setRecipe(fullRecipe[0]);
   };
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <View style={styles.tileContainer}>{<Tile id={randomId}></Tile>}</View>
+      <View style={styles.tileContainer}>
+        <Tile 
+          id={recipe.id} 
+          title={recipe.title} 
+          description={recipe.description} 
+          navigation={navigation} />
+      </View>
 
       <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
         <Text style={styles.buttonText}>Shuffle Recipes</Text>
