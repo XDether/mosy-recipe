@@ -10,7 +10,7 @@ import Recipe from "../models/Recipe.js";
 import { Divider } from "react-native-elements";
 import colors from "../constants/colors.js";
 
-export default function AddRecipeEditMode(props, {id, editingRecipe}){
+export default function AddRecipeEditMode(props, {id}){
   [data,setData] = useState([]);
   const [mode,setMode] = useState("ingredients")
   const [selectedUnit, setSelectedUnit] = useState("g");
@@ -22,7 +22,7 @@ export default function AddRecipeEditMode(props, {id, editingRecipe}){
   const [description, setDescription] = useState("");
   const [portionSize, setPortionSize] = useState(1);
   const [prepTime, setPrepTime] = useState("");
-  const [titleValue, setTitleValue] = useState("");
+  const [titleValue, setTitleValue] = useState("Titel");
   const [editIngredient, setEditIngredient] = useState("");
   const [editAmount, setEditAmount] = useState("");
   const [editedUnit, setEditedUnit] = useState("g");
@@ -124,7 +124,8 @@ const addInstructions = () => {
   
   useEffect(() => {
     const getCurrentRecipe = async() => {
-      if(props != null && props.route.params.editingRecipe.id != undefined){
+      if(props != null && props.route.params?.editingRecipe?.id != undefined){
+        console.log(editingRecipe)
         const data =  await storage.getDataWithId(props.route.params.editingRecipe.id);
         if(data != null){
           setData(data);
