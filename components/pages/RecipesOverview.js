@@ -10,35 +10,51 @@ import Tile from "../recipesOverview/Tile";
 import colors from "../constants/colors";
 import { TextInput } from "react-native";
 import { View } from "react-native";
+import storage from "../helpers/Storage";
+import Recipe from "../models/Recipe";
 
 export default function RecipesOverview({navigation, route, dataSet}) {
   [recipe, setRecipe] = useState([]);
 
+  //Temp Solution
+  [fullRecipe, setFullRecipe] = useState([])
+
   const [searchTerm, setSearchTerm] = useState("")
 
-  //UpdateRecipe();
-  useEffect(()=>{
-  if(dataSet != null){
-      setRecipe(dataSet);
+
+  async function Update()
+  {
+    console.log("Overview Update")
+    const data = await storage.getData();
+    if(data != null){
+      setFullRecipe(data);
+      setRecipe(data);
+    }
+
+    if(route.params)
+    {
+      try{
+        const tmpArray = new Array();
+        setSearchTerm(route.params.categoryID)
+        for(let item of fullRecipe)
+        {
+          if(item.categoryID === route.params.categoryID){
+            tmpArray.push(item)
+          }
+        }
+        setRecipe(tmpArray)
+      }catch(e)
+      {
+        console.error(e)
+      }
+      }
   }
 
-  if(route.params)
-  {
-    try{
-      const tmpArray = new Array();
-      setSearchTerm(route.params.categoryID)
-      for(let item of dataSet)
-      {
-        if(item.categoryID === route.params.categoryID){
-          tmpArray.push(item)
-        }
-      }
-      setRecipe(tmpArray)
-    }catch(e)
-    {
-      console.error(e)
-    }
-    }
+  useEffect(()=>{
+    const unsubscribe = navigation.addListener('focus', () => {
+      Update();
+    });
+    return unsubscribe;
   },[navigation, route.params, dataSet])
 
   const gridFormat = (recipeArray, colums) => {
@@ -52,13 +68,13 @@ export default function RecipesOverview({navigation, route, dataSet}) {
   {
     if(value === "" || value === null)
     {
-      setRecipe(dataSet)
+      setRecipe(fullRecipe)
     }
 
     else
     {
       const tmpArray = new Array();
-      for(let item of dataSet)
+      for(let item of fullRecipe)
       {
         if(item.title.includes(value)){
           tmpArray.push(item)
@@ -88,7 +104,7 @@ export default function RecipesOverview({navigation, route, dataSet}) {
         />
       </View>
       <FlatList
-        data={gridFormat(recipe, 2)}
+        data={recipe}
         horizontal={false}
         numColumns={2}
         renderItem={({ item }) => <Tile {...item} navigation={navigation}/>}
