@@ -20,14 +20,12 @@ export default function Tile({ id,title, description, invisible, navigation, isC
     return (
       <TouchableOpacity onPress={isCategory? onPressHandlerCategory : onPressHandler}>
         <View style={styles.container}>
-          {id ? (
-            <Image source={images[id]} style={styles.image} />
-          ) : (
-            <View style={styles.placeholder}></View>
-          )}
+
+          <Image source={images[Math.floor(Math.random() * 3)+1]} style={styles.image} />
           <View style={styles.textbox}>
             <Text style={styles.description}>{isCategory ? description : title}</Text>
           </View>
+
         </View>
       </TouchableOpacity>
     );

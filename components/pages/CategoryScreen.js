@@ -4,14 +4,19 @@ import { Dimensions } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import storage from "../helpers/Storage";
 import colors from "../constants/colors";
 
 export default function CategoryScreen({navigation, dataSet}){
   [category, setCategory] = useState([]);
-  useEffect(()=>{
-    if(dataSet != null){
+
+  async function Update()
+  {
+    const data = await storage.getData();
+
+    if(data != null){
       const unique = [];
-      for (const item of dataSet) {
+      for (const item of data) {
         const isDuplicate = unique.find((obj) => obj.categoryID === item.categoryID);
         if (!isDuplicate) {
           unique.push(item);
@@ -19,6 +24,14 @@ export default function CategoryScreen({navigation, dataSet}){
       }
       setCategory(unique)
     }
+    console.log("Category Update")
+  }
+
+  useEffect(()=>{
+    const unsubscribe = navigation.addListener('focus', () => {
+      Update();
+    });
+    return unsubscribe;
   },[navigation, dataSet])
 
   function CategoryTile({name}) {
