@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import Tile from "../recipesOverview/Tile";
 import colors from "../constants/colors";
-import storage from "../helpers/Storage";
-export default function HomeScreen() {
+export default function HomeScreen({dataSet}) {
   [recipe, setRecipe] = useState([
     {
       id: "1",
@@ -14,7 +13,7 @@ export default function HomeScreen() {
       description: "This is recipe 2",
     },
     {
-      id: "3",
+      id: "3",  
       description: "This is recipe 3",
     },
   ]);
@@ -23,13 +22,9 @@ export default function HomeScreen() {
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    const UpdateRecipe = async () => {
-      const data = await storage.getData();
-      if (data != null) {
-        setRecipe(data);
-      }
-    };
-    UpdateRecipe();
+    if (dataSet != null) {
+      setRecipe(dataSet);
+    }
 
     const length = recipe.length;
     setShuffledArray(
@@ -37,7 +32,7 @@ export default function HomeScreen() {
         () => Math.random() - 0.5
       )
     );
-  }, []);
+  }, [dataSet]);
 
   const handleButtonPress = () => {
     const index = shuffledArray[counter] - 1;
@@ -59,6 +54,7 @@ export default function HomeScreen() {
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   tileContainer: {
     flex: 0.8,

@@ -7,61 +7,39 @@ import {
 } from "react-native";
 
 import Tile from "../recipesOverview/Tile";
-import storage from "../helpers/Storage";
 import colors from "../constants/colors";
 import { TextInput } from "react-native";
 import { View } from "react-native";
 
-export default function RecipesOverview({navigation}) {
-  [recipe, setRecipe] = useState([
-    {
-      id: "1",
-      description: "This is recipe 1",
-    },
-    {
-      id: "2",
-      description: "This is recipe 2",
-    },
-    {
-      id: "3",
-      description: "This is recipe 3",
-    },
-  ]);
-
-  [fullRecipe, setFullRecipe] = useState([
-    {
-      id: "1",
-      description: "This is recipe 1",
-    },
-    {
-      id: "2",
-      description: "This is recipe 2",
-    },
-    {
-      id: "3",
-      description: "This is recipe 3",
-    },
-  ]);
-
-  const UpdateRecipe = async()=>
-  {
-    const data = await storage.getData();
-    if(data != null){
-        setRecipe(data);
-        setFullRecipe(data);
-    }
-  }
+export default function RecipesOverview({navigation, route, dataSet}) {
+  [recipe, setRecipe] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("")
 
   //UpdateRecipe();
   useEffect(()=>{
-    console.log(searchTerm)
-    navigation.addListener("focus",()=>{
-      UpdateRecipe()
-      
-    });
-  },[navigation])
+  if(dataSet != null){
+      setRecipe(dataSet);
+  }
+
+  if(route.params)
+  {
+    try{
+      const tmpArray = new Array();
+      setSearchTerm(route.params.categoryID)
+      for(let item of dataSet)
+      {
+        if(item.categoryID === route.params.categoryID){
+          tmpArray.push(item)
+        }
+      }
+      setRecipe(tmpArray)
+    }catch(e)
+    {
+      console.error(e)
+    }
+    }
+  },[navigation, route.params, dataSet])
 
   const gridFormat = (recipeArray, colums) => {
     if (recipeArray.length % 2 !== 0) {
@@ -74,13 +52,19 @@ export default function RecipesOverview({navigation}) {
   {
     if(value === "" || value === null)
     {
-      setRecipe(fullRecipe)
-    }else{
+      setRecipe(dataSet)
+    }
+
+    else
+    {
       const tmpArray = new Array();
-      for(let item of fullRecipe)
+      for(let item of dataSet)
       {
-        console.log(item.title)
-        if(item.title === value){
+        if(item.title.includes(value)){
+          tmpArray.push(item)
+        }
+
+        if(item.categoryID.includes(value)){
           tmpArray.push(item)
         }
       }
@@ -94,7 +78,13 @@ export default function RecipesOverview({navigation}) {
         <TextInput
           style={{ height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
           placeholder="Search"
-          onChangeText={(value) =>{ handleSearch(value)} }
+          onChangeText={(value)=>
+          {
+            handleSearch(value)
+            setSearchTerm(value)
+          }
+          }
+          value = {searchTerm}
         />
       </View>
       <FlatList

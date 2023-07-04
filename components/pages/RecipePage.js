@@ -9,7 +9,7 @@ import Category from "../RecipePage/Category";
 import IngredientList from "../RecipePage/ingredientList/IngredientList";
 import Steps from "../RecipePage/Steps";
 
-export default function RecipePage(props,{navigation}){
+export default function RecipePage(props){
     [data,setData] = useState([]);
     const [mode, setMode] = useState("ingredients");
     [onID, setOnID] = useState("3");

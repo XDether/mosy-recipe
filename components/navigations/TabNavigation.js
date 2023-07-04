@@ -10,12 +10,15 @@ import color from "../constants/colors";
 import { Button } from "react-native-elements";
 import { useEffect } from "react";
 
-export default function TabNavigation({navigation})
+export default function TabNavigation({navigation, dataSet})
 {
   const Tab = createBottomTabNavigator();
+
+
   function handleOnPress()
   {
       navigation.navigate("AddRecipeOverview")
+      console.log(dataSet)
   }
   return (
     <Tab.Navigator
@@ -57,9 +60,15 @@ export default function TabNavigation({navigation})
         })}
       >
 
-      <Tab.Screen name = "Home" component={HomeScreen} options={{title:"Heimat"}}/>
-      <Tab.Screen name="Recipes" component={RecipesOverview} options={{title:"Rezepte"}}/>
-      <Tab.Screen name = "Categorys" component={CategoryScreen} options={{title:"Kategorien"}}/>
+      <Tab.Screen name = "Home" options={{title:"Heimat"}}>
+        {(props) => <HomeScreen {...props} dataSet={dataSet}/>}
+      </Tab.Screen>
+      <Tab.Screen name = "Recipes" options={{title:"Rezepte"}}>
+        {(props) => <RecipesOverview {...props} dataSet={dataSet}/>}
+      </Tab.Screen>
+      <Tab.Screen name = "Categorys" options={{title:"Kategorien"}}>
+      {(props) => <CategoryScreen {...props} dataSet={dataSet}/>}
+      </Tab.Screen>
       
     </Tab.Navigator>
   )
