@@ -10,7 +10,7 @@ export default function HomeScreen({navigation}) {
 
   
   async function Update() {
-    const data = storage.getData();
+    const data = await storage.getData();
     if (data != null) {
       setFullRecipe(data);
       setRecipe(data[0]);
@@ -25,8 +25,8 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   const handleButtonPress = () => {
-    const index = Math.floor(Math.random() * fullRecipe.length)+1;
-    setRecipe(fullRecipe[0]);
+    const index = Math.floor(Math.random() * fullRecipe.length);
+    setRecipe(fullRecipe[index]);
   };
 
   return (
@@ -36,7 +36,7 @@ export default function HomeScreen({navigation}) {
           id={recipe.id} 
           title={recipe.title} 
           description={recipe.description} 
-          navigation={navigation} />
+          navigation={navigation}/>
       </View>
 
       <TouchableOpacity style={styles.button} onPress={handleButtonPress}>
