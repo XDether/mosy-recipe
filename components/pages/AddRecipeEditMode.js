@@ -1,21 +1,8 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  SafeAreaView,
-  ScrollView,
-  ImageBackground,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-  Modal,
-} from "react-native";
-
+import React,  {useEffect, useLayoutEffect, useState} from 'react';
+import { View, Text, TextInput, Button, SafeAreaView, ImageBackground, StyleSheet, TouchableOpacity, Dimensions, Modal, ScrollView, Touchable} from 'react-native';
 import unitData from "../partials/units";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Picker } from "@react-native-picker/picker";
+import {Picker} from "@react-native-picker/picker";
 import styles from "../styles/AddRecipeEditModeStyle";
 import unitJSON from "../partials/units";
 import storage from "../helpers/Storage.js";
@@ -23,92 +10,103 @@ import Recipe from "../models/Recipe.js";
 import { Divider } from "react-native-elements";
 import colors from "../constants/colors.js";
 
-export default function AddRecipeEditMode(
-  props,
-  { id, tempRecipe, setTempRecipe, editingRecipeData }
-) {
-  [data, setData] = useState([]);
-  const [mode, setMode] = useState("ingredients");
+export default function AddRecipeEditMode(props, {id, editingRecipe}){
+  [data,setData] = useState([]);
+  const [mode,setMode] = useState("ingredients")
   const [selectedUnit, setSelectedUnit] = useState("g");
   const [ingredientValue, setIngredientValue] = useState("");
   const [amountValue, setAmountValue] = useState();
-  const [titleValue, setTitleValue] = useState("");
   const [instructions, setInstructions] = useState([]);
   const [instructionValue, setInstructionValue] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [portionSize, setPortionSize] = useState(1);
   const [prepTime, setPrepTime] = useState("");
-
+  const [titleValue, setTitleValue] = useState("");
   const [editIngredient, setEditIngredient] = useState("");
   const [editAmount, setEditAmount] = useState("");
   const [editedUnit, setEditedUnit] = useState("g");
   const [editIndex, setEditIndex] = useState(null);
-  const [instructionsEditable, setInstructionsEditable] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
-  const [newInstruction, setNewInstruction] = useState("");
-  const [editedInstruction, setEditedInstruction] = useState("");
+
+  //new ingredient for Edit mode
+  const [newIngredient, setNewIngredient] = useState("")
+  const [newIngredientAmount, setNewIngredientAmount] = useState("")
+  const [newIngredientUnit, setNewIngredientUnit] = useState("")
+
+  const [editingID, setEditingID] = useState();
+
+  const [editMode, setEditMode] = useState(false);
 
   const changeMode = (newMode) => {
-    setMode(newMode);
-  };
-  useEffect(() => {
-    const updateRecipe = async () => {
-      if (props !== null) {
-        if (props.route.id !== undefined) {
-          const data = await storage.getDataWithId(props.route.id);
-          if (data !== null) {
-            setData(data);
-          }
-        }
-      }
+    setMode(newMode)
+  }
+
+const addIngredient = () => {
+  if (ingredientValue !== "" && amountValue !== "") {
+    const newIngredient = {
+      ingredient: ingredientValue,
+      amount: amountValue,
+      unit: selectedUnit
     };
-    updateRecipe();
-  }, []);
-  useLayoutEffect(() => {
-    if (props.tempRecipe !== null) {
-      props.navigation.setOptions({
-        headerTitle: props.tempRecipe.recipeJSON.title,
-      });
-    } else {
-      props.navigation.setOptions({
-        headerTitle: "Add Recipe",
-      });
-    }
-  });
+    const updatedIngredients = [...ingredients, newIngredient];
+    setIngredients(updatedIngredients);
+    setIngredientValue("");
+    setAmountValue("");
+  }
+}
 
-  const changeTitle = (text) => {
-    if( props.tempRecipe.rec !== null) {
-      props.tempRecipe.recipeJSON.title = text;
-    } else{
-      setTitleValue(text);
-    }
-  };
+const addNewIngredientEdit = () => {
+  if(newIngredient !== "" && newIngredientAmount !== ""){
+    const newInput = {
+      ingredient: newIngredient,
+      amount: newIngredientAmount,
+      unit: newIngredientUnit
+    };
+    const updatedIngredients = [...ingredients, newInput];
+    setIngredients(updatedIngredients);
+    setNewIngredient("");
+    setNewIngredientAmount("");
+  }
+  
+}
 
-  const [ingredients, setIngredients] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+const addInstructions = () => {
+  if (instructionValue !== "") {
+    const updatedInstruction = [...instructions, instructionValue];
+    setInstructions(updatedInstruction);
+    setInstructionValue("");
+  }
+};
 
-  const openModal = (index) => {
-    const selectedIngredient = ingredients[index];
-    setEditIndex(index);
-    setEditIngredient(selectedIngredient.ingredient);
-    setEditedUnit(selectedIngredient.unit);
-    setEditAmount(selectedIngredient.amount);
-    setIsModalVisible(true);
-  };
-
-  const customModal = (index) => {
-    const selectedIngredient = editingRecipe.ingredients[index];
-    setEditIndex(index);
-    setEditIngredient(selectedIngredient.ingredient);
-    setEditedUnit(selectedIngredient.unit);
-    setEditAmount(selectedIngredient.amount);
-    setIsModalVisible(true);
-  };
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
-
+  const saveDataToRecipe = async () => {
+    const allRecipes = await storage.getData();
+    const newID = storage.generateIDFromData(allRecipes);
+    await storage.addData(new Recipe(
+      newID,
+      category,
+      titleValue,
+      ingredients,
+      instructions,
+      description,
+      portionSize,
+      prepTime
+    ));
+    await storage.removeData(editingID);
+    props.navigation.navigate("Recipes");
+  }
+  const handleSave = () => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients[editIndex] = {
+      ingredient: editIngredient,
+      amount: editAmount,
+      unit: editedUnit
+    };
+    setIngredients(updatedIngredients);
+    closeModal();
+  }
   const recalculatePortionSize = (newPortionSize) => {
     if (newPortionSize === 0 || isNaN(newPortionSize)) {
       return;
@@ -122,222 +120,185 @@ export default function AddRecipeEditMode(
     }
   };
 
-  const handleSave = () => {
-    const updatedIngredient = [...ingredients];
-    updatedIngredient[editIndex] = {
-      ingredient: editIngredient,
-      amount: editAmount,
-      unit: editedUnit,
-    };
-    setIngredients(updatedIngredient);
-    closeModal();
-  };
-  const customHandleSave = () => {
-    const updatedIngredient = [...editingRecipe.ingredients];
-    updatedIngredient[editIndex] = {
-      ingredient: editIngredient,
-      amount: editAmount,
-      unit: editedUnit,
-    };
-    editingRecipe.ingredients = updatedIngredient;
-    closeModal();
-  };
 
-  // TODO! Change the tempRecipe way.. it is not good cause it always has a value -> nicht gut, irgendwas mit den ids ist auch nicht am funktionieren.
-  // muss nochmal überarbeitet werden, vielleicht so wie bei den anderen. mit dem editingRecipeData
-  const saveDataToRecipe = async () => {
-    if (props.tempRecipe !== null) {
-      const allRecipes = await storage.getData();
-      const newID = storage.generateIDFromData(allRecipes);
-      var lastID = props.tempRecipe.recipeJSON.id;
-      await storage.addData(
-        new Recipe(
-          newID,
-          props.tempRecipe.recipeJSON.category,
-          props.tempRecipe.recipeJSON.title,
-          props.tempRecipe.recipeJSON.ingredients,
-          props.tempRecipe.recipeJSON.instructions,
-          props.tempRecipe.recipeJSON.description,
-          props.tempRecipe.recipeJSON.portionSize,
-          props.tempRecipe.recipeJSON.time
-        )
-      );
-      props.tempRecipe = null;
-      console.log("lastID: " + lastID + " newID: " + newID);
-      if (lastID !== newID) {
-        await storage.removeData(lastID);
+  
+  useEffect(() => {
+    const getCurrentRecipe = async() => {
+      if(props != null && props.route.params.editingRecipe.id != undefined){
+        const data =  await storage.getDataWithId(props.route.params.editingRecipe.id);
+        if(data != null){
+          setData(data);
+          setTitleValue(data.title);
+          setPortionSize(data.portions);
+          setPrepTime(data.time);
+          setIngredients(data.ingredients);
+          setInstructions(data.instructions);
+          setCategory(data.categoryID);
+          setEditingID(props.route.params.editingRecipe.id);
+          props.navigation.setOptions({
+            title: data.title === "" ? "No title" : data.title
+          })
+          setEditMode(true);
+        }
       }
-      props.navigation.navigate("RecipePage", { id: newID });
-
-    } else if (editingRecipe !== undefined) {
-    
-      var lastID = editingRecipe.id;
-      await storage.addData(
-        new Recipe(
-          newID,
-          editingRecipe.categoryID,
-          editingRecipe.title,
-          editingRecipe.ingredients,
-          editingRecipe.instructions,
-          editingRecipe.description,
-          editingRecipe.portionSize,
-          editingRecipe.time
-        )
-      );
-      props.navigation.navigate("RecipePage", { id: newID });
-      await storage.removeData(lastID);
-    } else {
-      const allRecipes = await storage.getData();
-      const newID = storage.generateIDFromData(allRecipes);
-      await storage.addData(
-        new Recipe(
-          newID,
-          category,
-          titleValue,
-          ingredients,
-          instructions,
-          description,
-          portionSize,
-          prepTime
-        )
-      );
-      props.navigation.navigate("RecipePage", { id: newID });
-      await storage.removeData(lastID);
     }
+    getCurrentRecipe()
+  }, [])
+
+  useLayoutEffect(() => {
+    if (id !== null) {
+      props.navigation.setOptions({
+        //headerTitle: //getDataWithId().name
+      })
+    }
+  })
+  const changeTitle = (text) => {
+      setTitleValue(text);
+  };
+  const openModal = (index) => {
+    const selectedIngredient = ingredients[index];
+    setEditIndex(index);
+    setEditIngredient(selectedIngredient.ingredient);
+    setEditedUnit(selectedIngredient.unit);
+    setEditAmount(selectedIngredient.amount);
+    setIsModalVisible(true);
   };
 
-  const addIngredient = () => {
-    if (ingredientValue !== "" && amountValue !== "") {
-      const newIngredient = {
-        ingredient: ingredientValue,
-        amount: amountValue,
-        unit: selectedUnit,
-      };
-      const updatedIngredient = [...ingredients, newIngredient];
-      setIngredients(updatedIngredient);
-      setIngredientValue("");
-      setAmountValue("");
-    }
-  };
-
-  const addInstructions = () => {
-    if (instructionValue !== "") {
-      const updatedInstruction = [...instructions, instructionValue];
-      setInstructions(updatedInstruction);
-      setInstructionValue("");
-    }
-  };
-
-  try {
-    var editingRecipe = props.route.params.editingRecipe;
-  } catch (e) {
-    var editingRecipe = undefined;
+  const closeModal = () => {
+    setIsModalVisible(false)
   }
 
-  if (props.tempRecipe !== null) {
-    return (
-      <View style={{ overflow: "scroll", height: "100%" }}>
-        <ImageBackgroundComponent imageSRC={props.tempRecipe.recipeJSON.image} recipeTITLE={props.tempRecipe.recipeJSON.title} changeTitle={changeTitle} />
-        <View style={styles.textContainer}>
-          <View style={styles.textRow}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.accent,
-                borderRadius: 15,
-                paddingHorizontal: 10,
-              }}
-              onPress={() => changeMode("ingredients")}
-            >
-              <Text style={styles.textSize}>Zutaten</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.accent,
-                borderRadius: 15,
-                paddingHorizontal: 10,
-              }}
-              onPress={() => changeMode("steps")}
-            >
-              <Text style={styles.textSize}>Zubereitung</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+  if(!editMode) {
 
+  return (
+    <View style={{ overflow: "scroll", height: "100%" }}>
+      <ImageBackgroundComponent recipeTITLE={titleValue} changeTitle={changeTitle}/>
+      <View style={styles.textContainer}>
+        <View style={styles.textRow}>
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.accent,
+              borderRadius: 15,
+              paddingHorizontal: 10,
+            }}
+            onPress={() => changeMode("ingredients")}
+          >
+            <Text style={styles.textSize}>Zutaten</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              backgroundColor: colors.accent,
+              borderRadius: 15,
+              paddingHorizontal: 10,
+            }}
+            onPress={() => changeMode("steps")}
+          >
+            <Text style={styles.textSize}>Zubereitung</Text>
+          </TouchableOpacity>
+        </View>
         {mode === "ingredients" ? (
           <View>
             <View style={styles.iconContainer}>
               <View style={{ padding: 5 }}>
-                <Ionicons name="people-outline" size={30} color="black" />
-                <Text style={{ textAlign: "center" }}>
-                  {props.tempRecipe.recipeJSON.portionSize}
-                </Text>
+                <Ionicons name="people-outline" size={30} color="black"  />
+                <TextInput
+                  style={{ padding: 5, textAlign: "center" }}
+                  keyboardType={"numeric"}
+                  value={portionSize.toString()}
+                  onChangeText={(text) =>
+                    recalculatePortionSize(parseInt(text))
+                  }
+                ></TextInput>
               </View>
-              <View style={{ padding: 5 }}>
+              <View style={{ padding: 5, alignItems: "center" }}>
                 <Ionicons name="time-outline" size={30} color="black" />
-                <Text style={{ textAlign: "center" }}>
-                  {props.tempRecipe.recipeJSON.time}
-                </Text>
+                <TextInput
+                  style={{ padding: 5, textAlign: "center" }}
+                  placeholder={"insert time"}
+                  value={prepTime}
+                  onChangeText={(text) => setPrepTime(text)}
+                ></TextInput>
               </View>
               <View style={{ padding: 5 }}>
                 <Ionicons name="heart-outline" size={30} color="black" />
               </View>
             </View>
-            {/* kategorie View */}
+            {/* Kategorie View */}
             <View style={styles.categorieContainer}>
               <Text style={styles.textSize}>Kategorie:</Text>
-              <Text style={styles.textSize}>
-                {props.tempRecipe.recipeJSON.category}
-              </Text>
-              <TouchableOpacity style={{ padding: 10 }}>
-                <Ionicons name="pencil" size={25} color="black" />
-              </TouchableOpacity>
+              <TextInput
+                style={{
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  backgroundColor: "lightpink",
+                  borderColor: "red",
+                  fontSize: 15,
+                  padding: 5,
+                }}
+                placeholder="Kategorie"
+                value={category}
+                onChangeText={(text) => setCategory(text)}
+              />
+              {/*<TouchableOpacity style={{padding: 10}}>*/}
+              {/*  <Ionicons name="pencil" size={30} color="black"/>*/}
+              {/*</TouchableOpacity>*/}
             </View>
-
             {/* Zutaten View */}
             <View style={styles.ingredientsContainer}>
-              <Text style={styles.textSize}>Zutaten:</Text>
-              <View>
-                <SafeAreaView style={{ padding: 1}}>
-                  <ScrollView
-                    style={{height: "85%", paddingBottom: 5 }}
-                    contentContainerStyle={{ marginBottom: 5 }}
-                  >
-                    {props.tempRecipe.recipeJSON.ingredients.map(
-                      (ingredient, index) => {
-                        return (
-                          <View
-                            style={{
-                              width: "100%",
-                              flexDirection: "row",
-                              justifyContent: "space-between",
-                            }}
-                            key={index}
-                          >
-                            <Text style={{ fontSize: 20, paddingBottom: 5 }}>
-                              {ingredient.amount} {ingredient.unit}{" "}
-                              {ingredient.ingredient}
-                            </Text>
-                            <TouchableOpacity onPress={() => openModal(index)}>
-                              <Ionicons name="pencil" size={25} color="black" />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      }
-                    )}
-                  </ScrollView>
-                </SafeAreaView>
+              <Text style={styles.textSize}>Zutaten</Text>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity
+                  onPress={addIngredient}
+                  style={{
+                    justifyContent: "center",
+                    alignContent: "center",
+                  }}
+                >
+                  <Ionicons name="add-circle-outline" size={25} color="black" />
+                </TouchableOpacity>
+                <TextInput
+                  style={{
+                    fontSize: 20,
+                    textAlign: "center",
+                    marginRight: 5,
+                  }}
+                  placeholder="Zutat hinzufügen"
+                  value={ingredientValue}
+                  onChangeText={(text) => setIngredientValue(text)}
+                />
+                <TextInput
+                  inputMode="numeric"
+                  style={{ fontSize: 20, textAlign: "center" }}
+                  value={amountValue}
+                  onChangeText={(text) => setAmountValue(text)}
+                  placeholder="Menge"
+                />
+                <Picker
+                  style={{ height: 50, width: 130 }}
+                  selectedValue={selectedUnit}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setSelectedUnit(itemValue)
+                  }
+                >
+                  {unitData.map((unit, index) => {
+                    return (
+                      <Picker.Item
+                        key={index}
+                        label={unit.label}
+                        value={unit.value}
+                      />
+                    );
+                  })}
+                </Picker>
               </View>
-            </View>
-          </View>
-        ) : (
-          <View>
-            <SafeAreaView style={{ padding: 20 }}>
-              <ScrollView style={{ height: "85%"}}>
-                {props.tempRecipe.recipeJSON.instructions.map(
-                  (instruction, index) => {
+              <SafeAreaView style={{ padding: 5 }}>
+                <ScrollView
+                  style={{ height: "65%", paddingBottom: 5 }}
+                  contentContainerStyle={{ marginBottom: 5 }}
+                >
+                  {ingredients.map((ingredient, index) => {
                     return (
                       <View
-
                         style={{
                           width: "100%",
                           flexDirection: "row",
@@ -345,146 +306,25 @@ export default function AddRecipeEditMode(
                         }}
                         key={index}
                       >
-                        <Text style={{ fontSize: 20, paddingBottom: 5 }}>
-                          {instruction}
+                        <Text style={{ paddingBottom: 5, fontSize: 20 }}>
+                          {ingredient.amount} {ingredient.unit}{" "}
+                          {ingredient.ingredient}
                         </Text>
-                        <TouchableOpacity onPress={() => openModal(index)}>
-                          <Ionicons name="pencil" size={25} color="black" />
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  }
-                )}
-              </ScrollView>
-            </SafeAreaView>
-          </View>
-        )}
-         <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            backgroundColor: "pink",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingLeft: 10,
-          }}
-        >
-          <TouchableOpacity onPress={() => {props.navigation.navigate("Home")}}>
-            <Ionicons name="trash-outline" size={30} color="black" />
-          </TouchableOpacity>
-
-          <Text style={styles.textSize}>Edit Mode</Text>
-          <TouchableOpacity onPress={saveDataToRecipe}>
-            <Ionicons name="checkmark-circle-outline" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  } else if (editingRecipe !== undefined) {
-
-    return (
-      <View style={{ overflow: "scroll", height: "100%" }}>
-        <ImageBackgroundComponent imageSRC={editingRecipe.image} recipeTITLE={editingRecipe.title} changeTitle={changeTitle}/>
-        <View style={styles.textContainer}>
-          <View style={styles.textRow}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.accent,
-                borderRadius: 15,
-                paddingHorizontal: 10,
-              }}
-              onPress={() => changeMode("ingredients")}
-            >
-              <Text style={styles.textSize}>Zutaten</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.accent,
-                borderRadius: 15,
-                paddingHorizontal: 10,
-              }}
-              onPress={() => changeMode("steps")}
-            >
-              <Text style={styles.textSize}>Zubereitung</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {mode === "ingredients" ? (
-          <View>
-            <View style={styles.iconContainer}>
-              <View style={{ padding: 5 }}>
-                <Ionicons name="people-outline" size={30} color="black" />
-                <Text style={{ textAlign: "center" }}>
-                  {editingRecipe.portionSize}
-                </Text>
-              </View>
-              <View style={{ padding: 5 }}>
-                <Ionicons name="time-outline" size={30} color="black" />
-                <Text style={{ textAlign: "center" }}>
-                  {editingRecipe.time}
-                </Text>
-              </View>
-              <View style={{ padding: 5 }}>
-                <Ionicons name="heart-outline" size={30} color="black" />
-              </View>
-            </View>
-            {/* kategorie View */}
-            <View style={styles.categorieContainer}>
-              <Text style={styles.textSize}>Kategorie:</Text>
-              <Text style={styles.textSize}>{editingRecipe.categoryID}</Text>
-              <TouchableOpacity style={{ padding: 10 }}>
-                <Ionicons name="pencil" size={25} color="black" />
-              </TouchableOpacity>
-            </View>
-
-            {/* Zutaten View */}
-            <View style={styles.ingredientsContainer}>
-              <Text style={styles.textSize}>Zutaten:</Text>
-              <View>
-                <SafeAreaView style={{ height: "100%", padding: 5 }}>
-                  <ScrollView
-                    style={{ paddingBottom: 5 }}
-                    contentContainerStyle={{ marginBottom: 5 }}
-                  >
-                    {editingRecipe.ingredients.map((ingredient, index) => {
-                      return (
                         <View
                           style={{
-                            width: "100%",
                             flexDirection: "row",
-                            justifyContent: "space-between",
+                            justifyContent: "center",
                           }}
-                          key={index}
                         >
-                          <Text style={{ fontSize: 20, paddingBottom: 5 }}>
-                            {ingredient.amount} {ingredient.unit}{" "}
-                            {ingredient.ingredient}
-                          </Text>
                           <TouchableOpacity
-                            onPress={() => {
-                              customModal(index);
+                            style={{
+                              paddingRight: 20,
                             }}
+                            onPress={() => openModal(index)}
                           >
-                            <Ionicons name="pencil" size={25} color="black" />
+                            <Ionicons name="pencil" size={20} color="black" />
                           </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={() => {
-                              const updatedIngredients =
-                                editingRecipe.ingredients;
-                              updatedIngredients.splice(index, 1);
-                              setIngredients(updatedIngredients);
-                            }}
-                            style={{}}
-                          >
-                            <Ionicons
-                              name="trash-outline"
-                              size={20}
-                              color="black"
-                            />
-                          </TouchableOpacity>
+                          {/* DIVIDER HIER HIN  */}
                           <Modal
                             visible={isModalVisible}
                             animationType="slide"
@@ -580,7 +420,7 @@ export default function AddRecipeEditMode(
                               >
                                 <Button
                                   title="Speichern"
-                                  onPress={customHandleSave}
+                                  onPress={handleSave}
                                 />
                                 <Button
                                   title="Abbrechen"
@@ -589,517 +429,385 @@ export default function AddRecipeEditMode(
                               </View>
                             </View>
                           </Modal>
+                          <TouchableOpacity
+                            onPress={() => {
+                              const updatedIngredients = [...ingredients];
+                              updatedIngredients.splice(index, 1);
+                              setIngredients(updatedIngredients);
+                            }}
+                            style={{}}
+                          >
+                            <Ionicons
+                              name="trash-outline"
+                              size={20}
+                              color="black"
+                            />
+                          </TouchableOpacity>
                         </View>
-                      );
-                    })}
-                  </ScrollView>
-                </SafeAreaView>
-              </View>
+                      </View>
+                    );
+                  })}
+                </ScrollView>
+              </SafeAreaView>
             </View>
           </View>
         ) : (
-          <View>
-            <SafeAreaView style={{ padding: 20 }}>
-              <View
-                style={{
-                  width: "100%",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                }}
-              >
-                <TextInput style={{maxWidth: '40%'}} value={newInstruction} placeholder="Neue Anweisung" keyboardType="default" onChangeText={(text) => setNewInstruction(text)} />
-                <TouchableOpacity
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                  }}
-                  onPress={() => {
-                    const updatedInstructions = [...editingRecipe.instructions];
-                    updatedInstructions.push(newInstruction);
-                    editingRecipe.instructions = updatedInstructions;
-                    setNewInstruction("");
-
-                  }}
-                >
-                  <Text style={{ fontSize: 12 }}>Zubereitung hinzufügen</Text>
+          <View style={{ paddingTop: 30, paddingLeft: 10 }}>
+            <View style={{ flexDirection: "column" }}>
+              <View style={{ flexDirection: "row" }}>
+                <TouchableOpacity onPress={addInstructions}>
                   <Ionicons name="add-circle-outline" size={25} color="black" />
                 </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  borderBottomColor: "black",
-                  borderBottomWidth: StyleSheet.hairlineWidth * 2,
-                  padding: 10,
-                }}
-              />
-              <ScrollView
-                style={{ paddingBottom: 5, height: "85%" }}
-                contentContainerStyle={{ marginBottom: 5 }}
-              >
-                <View
-                  style={{
-                    width: "100%",
-                    flexDirection: "column",
-                    paddingBottom: 20,
-                    justifyContent: "space-between",
-                  }}
-                >
-                    {editingRecipe.instructions.map((instruction, index) => {
-                      return(
-                        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}  key={index}>
-                          <Text style={{color:'black', fontSize: 15, paddingBottom: 5, maxWidth: "85%"}}>
-                            {index + 1}.  {instruction}
-                          </Text>
-                          <TouchableOpacity onPress={() => {
-                            //here should the instruction be editable with a modaldas
-                            instructionsEditable ? setInstructionsEditable(false) : setInstructionsEditable(true)
-                            setEditedInstruction(instruction)
-                          }}>
-                    <Ionicons name="pencil" size={25} color="black" />
-                  </TouchableOpacity>
-                  <Modal visible={instructionsEditable} animationType="slide">
-                  <View style={{}}>
-                    <View
-
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: 50,
-                      }}
-                    >
-                      <Text
-                        style={{ fontSize: 20, paddingRight: 10 }}
-                      >
-                        Anweisung bearbeiten:
-                      </Text>
-                      <TextInput
-                        style={{
-                          fontSize: 15,
-                          justifyContent: "center",
-                          alignSelf: "center",
-                          maxWidth: '50%'
-                        }}
-                        value={editedInstruction}
-                        onChangeText={(text) =>
-                          setEditedInstruction(text)
-                        }
-                        placeholder="Anweisung"
-                      />
-                      </View>
-                      <Button title="Speichern" onPress={() => {
-                        const updatedInstructions = [...editingRecipe.instructions];
-                        updatedInstructions[index] = editedInstruction;
-                        editingRecipe.instructions = updatedInstructions;
-                        setEditedInstruction("");
-                        setInstructionsEditable(false)
-                      }}/>
-
-                    </View>
-                </Modal>
-                        </View>
-                      )
-  
-  })}
-
-                </View>
-                
-              </ScrollView>
-            </SafeAreaView>
-          </View>
-        )}
-         <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            backgroundColor: "pink",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingLeft: 10,
-          }}
-        >
-          <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
-            <Ionicons name="trash-outline" size={30} color="black" />
-          </TouchableOpacity>
-
-          <Text style={styles.textSize}>Edit Mode</Text>
-          <TouchableOpacity onPress={saveDataToRecipe}>
-            <Ionicons name="checkmark-circle-outline" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    );
-  } else {
-    return (
-      <View style={{ overflow: "scroll", height: "100%" }}>
-        <ImageBackgroundComponent recipeTITLE={titleValue} changeTitle={changeTitle}/>
-        <View style={styles.textContainer}>
-          <View style={styles.textRow}>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.accent,
-                borderRadius: 15,
-                paddingHorizontal: 10,
-              }}
-              onPress={() => changeMode("ingredients")}
-            >
-              <Text style={styles.textSize}>Zutaten</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                backgroundColor: colors.accent,
-                borderRadius: 15,
-                paddingHorizontal: 10,
-              }}
-              onPress={() => changeMode("steps")}
-            >
-              <Text style={styles.textSize}>Zubereitung</Text>
-            </TouchableOpacity>
-          </View>
-          {mode === "ingredients" ? (
-            <View>
-              <View style={styles.iconContainer}>
-                <View style={{ padding: 5 }}>
-                  <Ionicons name="people-outline" size={30} color="black" />
-                  <TextInput
-                    style={{ padding: 5, textAlign: "center" }}
-                    keyboardType={"numeric"}
-                    value={portionSize.toString()}
-                    onChangeText={(text) =>
-                      recalculatePortionSize(parseInt(text))
-                    }
-                  ></TextInput>
-                </View>
-                <View style={{ padding: 5, alignItems: "center" }}>
-                  <Ionicons name="time-outline" size={30} color="black" />
-                  <TextInput
-                    style={{ padding: 5, textAlign: "center" }}
-                    placeholder={"insert time"}
-                    value={prepTime}
-                    onChangeText={(text) => setPrepTime(text)}
-                  ></TextInput>
-                </View>
-                <View style={{ padding: 5 }}>
-                  <Ionicons name="heart-outline" size={30} color="black" />
-                </View>
-              </View>
-              {/* Kategorie View */}
-              <View style={styles.categorieContainer}>
-                <Text style={styles.textSize}>Kategorie:</Text>
                 <TextInput
-                  style={{
-                    borderWidth: 1,
-                    borderRadius: 10,
-                    backgroundColor: "lightpink",
-                    borderColor: "red",
-                    fontSize: 15,
-                    padding: 5,
-                  }}
-                  placeholder="Kategorie"
-                  value={category}
-                  onChangeText={(text) => setCategory(text)}
+                  value={instructionValue}
+                  onChangeText={(text) => setInstructionValue(text)}
+                  style={styles.textSize}
+                  placeholder="Schritt hinzufügen"
                 />
-                {/*<TouchableOpacity style={{padding: 10}}>*/}
-                {/*  <Ionicons name="pencil" size={30} color="black"/>*/}
-                {/*</TouchableOpacity>*/}
               </View>
-              {/* Zutaten View */}
-              <View style={styles.ingredientsContainer}>
-                <Text style={styles.textSize}>Zutaten</Text>
-                <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity
-                    onPress={addIngredient}
-                    style={{
-                      justifyContent: "center",
-                      alignContent: "center",
-                    }}
-                  >
-                    <Ionicons name="add-circle-outline" size={25} color="black" />
-                  </TouchableOpacity>
-                  <TextInput
-                    style={{
-                      fontSize: 20,
-                      textAlign: "center",
-                      marginRight: 5,
-                    }}
-                    placeholder="Zutat hinzufügen"
-                    value={ingredientValue}
-                    onChangeText={(text) => setIngredientValue(text)}
-                  />
-                  <TextInput
-                    inputMode="numeric"
-                    style={{ fontSize: 20, textAlign: "center" }}
-                    value={amountValue}
-                    onChangeText={(text) => setAmountValue(text)}
-                    placeholder="Menge"
-                  />
-                  <Picker
-                    style={{ height: 50, width: 130 }}
-                    selectedValue={selectedUnit}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setSelectedUnit(itemValue)
-                    }
-                  >
-                    {unitData.map((unit, index) => {
-                      return (
-                        <Picker.Item
-                          key={index}
-                          label={unit.label}
-                          value={unit.value}
-                        />
-                      );
-                    })}
-                  </Picker>
-                </View>
-                <SafeAreaView style={{ padding: 5 }}>
+
+              {instructions.length > 0 ? (
+                <SafeAreaView style={{ padding: 20 }}>
                   <ScrollView
-                    style={{ height: "65%", paddingBottom: 5 }}
+                    style={{ paddingBottom: 5, height: "85%" }}
                     contentContainerStyle={{ marginBottom: 5 }}
                   >
-                    {ingredients.map((ingredient, index) => {
+                    {instructions.map((instruction, index) => {
                       return (
                         <View
                           style={{
-                            width: "100%",
+                            width: "80%",
                             flexDirection: "row",
+                            paddingBottom: 20,
                             justifyContent: "space-between",
                           }}
                           key={index}
                         >
-                          <Text style={{ paddingBottom: 5, fontSize: 20 }}>
-                            {ingredient.amount} {ingredient.unit}{" "}
-                            {ingredient.ingredient}
+                          <Text style={{ fontSize: 15, maxWidth: "80%" }}>
+                            {" "}
+                            {instruction}
                           </Text>
-                          <View
-                            style={{
-                              flexDirection: "row",
-                              justifyContent: "center",
+
+                          <TouchableOpacity
+                            style={{ alignItems: "center" }}
+                            onPress={() => {
+                              const updatedInstructions = [...instructions];
+                              updatedInstructions.splice(index, 1);
+                              setInstructions(updatedInstructions);
                             }}
                           >
-                            <TouchableOpacity
-                              style={{
-                                paddingRight: 20,
-                              }}
-                              onPress={() => openModal(index)}
-                            >
-                              <Ionicons name="pencil" size={20} color="black" />
-                            </TouchableOpacity>
-                            {/* DIVIDER HIER HIN  */}
-                            <Modal
-                              visible={isModalVisible}
-                              animationType="slide"
-                              onRequestClose={closeModal}
-                            >
-                              <View style={{}}>
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    padding: 50,
-                                  }}
-                                >
-                                  <Text
-                                    style={{ fontSize: 20, paddingRight: 10 }}
-                                  >
-                                    Zutat bearbeiten:
-                                  </Text>
-                                  <TextInput
-                                    style={{
-                                      fontSize: 15,
-                                      justifyContent: "center",
-                                      alignSelf: "center",
-                                    }}
-                                    value={editIngredient}
-                                    onChangeText={(text) =>
-                                      setEditIngredient(text)
-                                    }
-                                    placeholder="Zutat"
-                                  />
-                                </View>
-
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                  }}
-                                >
-                                  <Text style={{ fontSize: 20 }}>
-                                    Unit bearbeiten:
-                                  </Text>
-                                  <Picker
-                                    style={{ height: 50, width: 130 }}
-                                    selectedValue={editedUnit}
-                                    onValueChange={(itemValue, itemIndex) =>
-                                      setEditedUnit(itemValue)
-                                    }
-                                  >
-                                    {unitJSON.map((unit, index) => {
-                                      return (
-                                        <Picker.Item
-                                          key={index}
-                                          label={unit.label}
-                                          value={unit.value}
-                                        />
-                                      );
-                                    })}
-                                  </Picker>
-                                </View>
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    paddingTop: 50,
-                                  }}
-                                >
-                                  <Text
-                                    style={{ fontSize: 20, paddingRight: 15 }}
-                                  >
-                                    Menge bearbeiten:
-                                  </Text>
-                                  <TextInput
-                                    style={{
-                                      fontSize: 18,
-                                      justifyContent: "center",
-                                      alignSelf: "center",
-                                    }}
-                                    value={editAmount}
-                                    onChangeText={(text) => setEditAmount(text)}
-                                    placeholder="Menge"
-                                    keyboardType="numeric"
-                                  />
-                                </View>
-                                <View
-                                  style={{
-                                    flexDirection: "row",
-                                    justifyContent: "center",
-                                    paddingTop: 50,
-                                  }}
-                                >
-                                  <Button
-                                    title="Speichern"
-                                    onPress={handleSave}
-                                  />
-                                  <Button
-                                    title="Abbrechen"
-                                    onPress={closeModal}
-                                  />
-                                </View>
-                              </View>
-                            </Modal>
-                            <TouchableOpacity
-                              onPress={() => {
-                                const updatedIngredients = [...ingredients];
-                                updatedIngredients.splice(index, 1);
-                                setIngredients(updatedIngredients);
-                              }}
-                              style={{}}
-                            >
-                              <Ionicons
-                                name="trash-outline"
-                                size={20}
-                                color="black"
-                              />
-                            </TouchableOpacity>
-                          </View>
+                            <Ionicons
+                              name="trash-outline"
+                              size={25}
+                              color="black"
+                            />
+                          </TouchableOpacity>
                         </View>
                       );
                     })}
                   </ScrollView>
                 </SafeAreaView>
-              </View>
+              ) : null}
             </View>
-          ) : (
-            <View style={{ paddingTop: 30, paddingLeft: 10 }}>
-              <View style={{ flexDirection: "column" }}>
-                <View style={{ flexDirection: "row" }}>
-                  <TouchableOpacity onPress={addInstructions}>
+          </View>
+        )}
+      </View>
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          backgroundColor: "pink",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          paddingLeft: 10,
+        }}
+      >
+        <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
+          <Ionicons name="trash-outline" size={30} color="black" />
+        </TouchableOpacity>
+
+        <Text style={styles.textSize}>Edit Mode</Text>
+        <TouchableOpacity onPress={saveDataToRecipe}>
+          <Ionicons name="checkmark-circle-outline" size={30} color="black" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
+
+} else{
+  return(
+    <View style={{overflow: "scroll", height: "100%"}}>
+      <ImageBackgroundComponent recipeTITLE={titleValue} changeTitle={changeTitle} />
+      <View style={styles.textContainer}>
+        <View style={styles.textRow}>
+          <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() =>changeMode("ingredients")}>
+            <Text style={[styles.textSize]}>Zutaten</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() =>changeMode("steps")}>
+            <Text style={[styles.textSize]}>Zubereitung</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+      {mode === "ingredients" ? (
+        <View>
+          <View style={styles.iconContainer}>
+            <View style={{padding:5}}>
+              <Ionicons name="people-outline" size={30} color="black" />
+              <TextInput
+                style={{padding:5, textAlign: 'center'}} keyboardType='numeric' value={portionSize.toString()} onChangeText={(text) => recalculatePortionSize(parseInt(text))}  />
+            </View>
+            <View style={{ padding: 5 }}>
+                <Ionicons name="time-outline" size={30} color="black" />
+                <Text style={{ textAlign: "center" }}>
+                  {prepTime}
+                </Text>
+              </View>
+
+              <View style={{ padding: 5 }}>
+                <Ionicons name="heart-outline" size={30} color="black" />
+              </View>
+          </View>
+        {/* Kategorie*/}
+          <View style={styles.categorieContainer}>
+              <Text style={styles.textSize}>Kategorie:</Text>
+              <TextInput style={{padding: 5, textAlign: "center", maxWidth: "30%", fontSize: 17, color: 'black'}} placeholder={category}  value={category} onChangeText={(text) => setCategory(text)} />
+          </View>
+        {/* zutaten*/}
+
+          <View style={styles.ingredientsContainer}>
+            <View style={{flexDirection : 'row', alignItems: 'center', justifyContent:'space-evenly', borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth*2}}>
+              <Text style={styles.textSize}>Zutaten</Text>
+              <TextInput style={{paddingLeft: 20, maxWidth: "20%"}} placeholder='Menge' value={newIngredientAmount} onChangeText={(text) => {setNewIngredientAmount(text);}} />
+              <Picker
+                  style={{paddingLeft: 0, width: 120}}
+                  selectedValue={newIngredientUnit}
+                  onValueChange={(itemValue, itemIndex) =>
+                    setNewIngredientUnit(itemValue)
+                  }
+                >
+                  {unitData.map((unit, index) => {
+                    return (
+                      <Picker.Item
+                        key={index}
+                        label={unit.label}
+                        value={unit.value}
+                      />
+                    );
+                  })}
+                </Picker>
+                <TextInput  style={{maxWidth: "20%"}}placeholder='Zutat' value={newIngredient} onChangeText={(text) => {setNewIngredient(text);}} />
+                <TouchableOpacity onPress={addNewIngredientEdit}>
+                  <Ionicons name="checkmark" size={20} color="black"/>
+                </TouchableOpacity>
+            </View>
+
+            <View>
+              <SafeAreaView style={{ height: "100%", padding: 5 }}>
+                <ScrollView
+                    style={{ paddingBottom: 5 }}
+                    contentContainerStyle={{ marginBottom: 5 }}>
+                      {ingredients.map((ingredient, index) => {
+                        return(
+                          <View style={{display: "flex", flexDirection:"row", maxWidth: "100%"}} key={index}>
+                              <Text style={{fontSize: 16,width: 50, maxWidth: "75%"}}>{ingredient.amount}</Text>
+                              <Text style={{fontSize: 16,width: 50}}>{ingredient.unit}</Text>
+                              <Text style={{fontSize: 16,maxWidth: "70%"}}>{ingredient.ingredient}</Text>
+                            <TouchableOpacity style={{ marginLeft: "auto"}} onPress={() => openModal(index)} >
+                              <Ionicons name="pencil" size={25} color="black" />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                             const updatedIngredients = ingredients.filter((_, i) => i !== index);
+                            setIngredients(updatedIngredients);
+                             
+                            }}>
+                              <Ionicons name="trash-outline" size={20} color="black"/>
+
+                            </TouchableOpacity>
+                            <Modal
+                            visible={isModalVisible}
+                            animationType="slide"
+                            onRequestClose={closeModal}
+                          >
+                            <View style={{}}>
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  padding: 50,
+                                }}
+                              >
+                                <Text
+                                  style={{ fontSize: 20, paddingRight: 10 }}
+                                >
+                                  Zutat bearbeiten:
+                                </Text>
+                                <TextInput
+                                  style={{
+                                    fontSize: 15,
+                                    justifyContent: "center",
+                                    alignSelf: "center",
+                                  }}
+                                  value={editIngredient}
+                                  onChangeText={(text) =>
+                                    setEditIngredient(text)
+                                  }
+                                  placeholder="Zutat"
+                                />
+                              </View>
+
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <Text style={{ fontSize: 20 }}>
+                                  Unit bearbeiten:
+                                </Text>
+                                <Picker
+                                  style={{ height: 50, width: 130 }}
+                                  selectedValue={editedUnit}
+                                  onValueChange={(itemValue, itemIndex) =>
+                                    setEditedUnit(itemValue)
+                                  }
+                                >
+                                  {unitJSON.map((unit, index) => {
+                                    return (
+                                      <Picker.Item
+                                        key={index}
+                                        label={unit.label}
+                                        value={unit.value}
+                                      />
+                                    );
+                                  })}
+                                </Picker>
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  paddingTop: 50,
+                                }}
+                              >
+                                <Text
+                                  style={{ fontSize: 20, paddingRight: 15 }}
+                                >
+                                  Menge bearbeiten:
+                                </Text>
+                                <TextInput
+                                  style={{
+                                    fontSize: 18,
+                                    justifyContent: "center",
+                                    alignSelf: "center",
+                                  }}
+                                  value={editAmount}
+                                  onChangeText={(text) => setEditAmount(text)}
+                                  placeholder="Menge"
+                                  keyboardType="numeric"
+                                />
+                              </View>
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  justifyContent: "center",
+                                  paddingTop: 50,
+                                }}
+                              >
+                                <Button
+                                  title="Speichern"
+                                  onPress={handleSave}
+                                />
+                                <Button
+                                  title="Abbrechen"
+                                  onPress={closeModal}
+                                />
+                              </View>
+                            </View>
+                          </Modal>
+                          </View>
+                        )
+                      })}
+
+
+
+                    </ScrollView>
+                </SafeAreaView>
+            </View>
+         </View>
+
+
+        </View>
+
+
+
+       ) : (
+        <View style={{ paddingTop: 30, paddingLeft: 10 }}>
+          <View style={{ flexDirection: "column"}}>
+            <View style={{ flexDirection: "row",borderBottomColor: 'black', borderBottomWidth: StyleSheet.hairlineWidth * 2}}>
+              <TouchableOpacity onPress={addInstructions}>
                     <Ionicons name="add-circle-outline" size={25} color="black" />
-                  </TouchableOpacity>
-                  <TextInput
+              </TouchableOpacity>
+              <TextInput
                     value={instructionValue}
                     onChangeText={(text) => setInstructionValue(text)}
                     style={styles.textSize}
                     placeholder="Schritt hinzufügen"
                   />
-                </View>
-
-                {instructions.length > 0 ? (
-                  <SafeAreaView style={{ padding: 20 }}>
-                    <ScrollView
-                      style={{ paddingBottom: 5, height: "85%" }}
-                      contentContainerStyle={{ marginBottom: 5 }}
-                    >
-                      {instructions.map((instruction, index) => {
-                        return (
-                          <View
-                            style={{
-                              width: "80%",
-                              flexDirection: "row",
-                              paddingBottom: 20,
-                              justifyContent: "space-between",
-                            }}
-                            key={index}
-                          >
-                            <Text style={{ fontSize: 15, maxWidth: "80%" }}>
-                              {" "}
-                              {instruction}
-                            </Text>
-
-                            <TouchableOpacity
-                              style={{ alignItems: "center" }}
-                              onPress={() => {
-                                const updatedInstructions = [...instructions];
-                                updatedInstructions.splice(index, 1);
-                                setInstructions(updatedInstructions);
-                              }}
-                            >
-                              <Ionicons
-                                name="trash-outline"
-                                size={25}
-                                color="black"
-                              />
-                            </TouchableOpacity>
-                          </View>
-                        );
-                      })}
-                    </ScrollView>
-                  </SafeAreaView>
-                ) : null}
-              </View>
             </View>
-          )}
-        </View>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            backgroundColor: "pink",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingLeft: 10,
-          }}
-        >
-          <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
-            <Ionicons name="trash-outline" size={30} color="black" />
-          </TouchableOpacity>
+            </View>
+            {instructions.length > 0 ? (
+              <SafeAreaView style={{padding:20}}>
+                <ScrollView style={{paddingBottom: 5, height: "90%"}} contentContainerStyle={{marginBottom: 5}}>
+                    {instructions.map((instruction, index) => {
+                      return (
+                        <View style={{width: "100%", flexDirection:'row', paddingBottom: 20}} key={index}>
+                          <Text style={{fontSize: 20, maxWidth: "80%"}}> {instruction}</Text>
+                          <View style={{marginLeft: "auto", flexDirection:'row'}}>
+                          <TouchableOpacity style={{alignItems:'center'}} onPress={() => {
+                            const updatedInstruction = [...instructions];
+                            updatedInstruction.splice(index,1);
+                            setInstructions(updatedInstruction);
+                          }}>
+                            <Ionicons name="trash-outline" size={25} color= "black"></Ionicons>
+                          </TouchableOpacity>
+                          <TouchableOpacity>
+                            <Ionicons name="pencil" size={25} color="black"></Ionicons>
+                          </TouchableOpacity>
+                          </View>
+                        </View>
+                      )
+                    })}
+                </ScrollView>
+              </SafeAreaView>
 
-          <Text style={styles.textSize}>Edit Mode</Text>
-          <TouchableOpacity onPress={saveDataToRecipe}>
-            <Ionicons name="checkmark-circle-outline" size={30} color="black" />
-          </TouchableOpacity>
-        </View>
+            ) : null}
+                
+            </View>
+        
+        )
+      }
+      <View style={{position: "absolute", bottom: 0, width: "100%", backgroundColor: colors.accent, flexDirection:'row', justifyContent:'space-between', alignItems: 'center', paddingLeft: 10}}>
+        <TouchableOpacity onPress={() => {props.navigation.navigate("Home")}}>
+          <Ionicons name="trash-outline" size={30} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.textSize}>Edit Mode</Text>
+        <TouchableOpacity onPress={saveDataToRecipe}>
+          <Ionicons name="checkmark-circle-outline" size={30} color="black"/>
+        </TouchableOpacity>
+
       </View>
-    );
-  }
+    </View>
+  )
 }
+}
+
+
+
 const ImageBackgroundComponent = props => {
   const [childRecipeTitle, setChildRecipeTitle] = useState("")
   return (
@@ -1109,10 +817,7 @@ const ImageBackgroundComponent = props => {
       style={{height: 200}}
       source={{ uri: props.imageSRC }}>
         <View style={{position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', width: "100%",backgroundColor: 'rgba(211,211,211, 0.5)', justifyContent: 'space-between'}}>
-        <TextInput style={{fontSize: 20,marginLeft: 10, color: "black", maxWidth: "85%"}} placeholder="RezeptTitel" value={childRecipeTitle} onChangeText={(text) => {setChildRecipeTitle(text);}}/>
-            <TouchableOpacity style={{marginRight: 10}} onPress={() => props.changeTitle(childRecipeTitle)} >
-              <Ionicons name="checkmark-circle-outline" size={20} color="black" />
-            </TouchableOpacity>
+        <TextInput style={{fontSize: 20,marginLeft: 10, color: "black", maxWidth: "85%"}} placeholder={props.recipeTITLE} value={props.recipeTITLE} onChangeText={(text) => {props.changeTitle(text);}}/>
         </View>
       </ImageBackground>
     </View>
