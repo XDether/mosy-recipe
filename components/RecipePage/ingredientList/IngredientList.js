@@ -8,7 +8,7 @@ export default function IngredientList({ingredients}){
     <View>
         <Text style={{fontSize: 20, fontWeight:"bold",marginBottom: 10}}>Zutaten</Text>
         <FlatList data = {ingredients}
-        renderItem={({item}) => <Entry amount={item.amount} ingredient={item.ingredient}></Entry>}
+        renderItem={({item}) => <Entry amount={item.amount} unit={item.unit} ingredient={item.ingredient}></Entry>}
         />
     </View>
     )
