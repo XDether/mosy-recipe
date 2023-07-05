@@ -1,16 +1,21 @@
 //import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
+import { StyleSheet ,StatusBar } from 'react-native';
 import MainNavigation from './components/navigations/MainNavigation';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import colors from './components/constants/colors';
-import CameraTest from './components/helpers/CameraTest';
+import CameraTest from './components/helpers/Camera';
 
 
 export default function App() {
-  return(
-    <CameraTest/>
+  useLayoutEffect(() => {
 
+  }, [])
+  return(
+    <NavigationContainer theme={{ colors: {...DefaultTheme.colors , background : colors.background}}}>
+      <StatusBar backgroundColor={colors.primary}/>
+     <MainNavigation/>
+  </NavigationContainer>
   );
 }
 

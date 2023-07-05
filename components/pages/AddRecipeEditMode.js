@@ -9,6 +9,7 @@ import storage from "../helpers/Storage.js";
 import Recipe from "../models/Recipe.js";
 import { Divider } from "react-native-elements";
 import colors from "../constants/colors.js";
+import CameraTest from '../helpers/Camera';
 
 export default function AddRecipeEditMode(props, {id}){
   [data,setData] = useState([]);
@@ -29,6 +30,8 @@ export default function AddRecipeEditMode(props, {id}){
   const [editIndex, setEditIndex] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [cameraModal, setCameraModal] = useState(false)
+  const [newImage, setNewImage] = useState("")
 
 
   //new ingredient for Edit mode
@@ -92,7 +95,8 @@ const addInstructions = () => {
       instructions,
       description,
       portionSize,
-      prepTime
+      prepTime,
+      newImage
     ));
     await storage.removeData(editingID);
     props.navigation.navigate("Recipes");
@@ -131,6 +135,7 @@ const addInstructions = () => {
           setTitleValue(data.title);
           setPortionSize(data.portions);
           setPrepTime(data.time);
+          setNewImage(data.image);
           setIngredients(data.ingredients);
           setInstructions(data.instructions);
           setCategory(data.categoryID);
@@ -172,7 +177,8 @@ const addInstructions = () => {
 
   return (
     <View style={{ overflow: "scroll", height: "100%" }}>
-      <ImageBackgroundComponent recipeTITLE={titleValue} changeTitle={changeTitle}/>
+      <ImageBackgroundComponent setCameraModal={setCameraModal} recipeTITLE={titleValue}  imageSRC={newImage ? newImage : null} changeTitle={changeTitle}/>
+      <CameraTest setImage={setNewImage} cameraModal={cameraModal} setCameraModal={setCameraModal} />
       <View style={styles.textContainer}>
         <View style={styles.textRow}>
           <TouchableOpacity
@@ -230,8 +236,8 @@ const addInstructions = () => {
                 style={{
                   borderWidth: 1,
                   borderRadius: 10,
-                  backgroundColor: "lightpink",
-                  borderColor: "red",
+                  backgroundColor: colors.background,
+                  borderColor: colors.primary,
                   fontSize: 15,
                   padding: 5,
                 }}
@@ -517,7 +523,7 @@ const addInstructions = () => {
           position: "absolute",
           bottom: 0,
           width: "100%",
-          backgroundColor: "pink",
+          backgroundColor: colors.primary,
           flexDirection: "row",
           justifyContent: "space-between",
           alignItems: "center",
@@ -808,16 +814,19 @@ const addInstructions = () => {
 
 
 
-const ImageBackgroundComponent = props => {
+const ImageBackgroundComponent = ({imageSRC, recipeTITLE, changeTitle, setCameraModal}) => {
   const [childRecipeTitle, setChildRecipeTitle] = useState("")
   return (
     <View>
       <ImageBackground
       resizeMode="cover"
       style={{height: 200}}
-      source={{ uri: props.imageSRC }}>
+      source={{uri: imageSRC} }>
         <View style={{position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', width: "100%",backgroundColor: 'rgba(211,211,211, 0.5)', justifyContent: 'space-between'}}>
-        <TextInput style={{fontSize: 20,marginLeft: 10, color: "black", maxWidth: "85%"}} placeholder={props.recipeTITLE} value={props.recipeTITLE} onChangeText={(text) => {props.changeTitle(text);}}/>
+        <TextInput style={{fontSize: 20,marginLeft: 10, color: "black", maxWidth: "85%"}} placeholder={recipeTITLE} value={recipeTITLE} onChangeText={(text) => {changeTitle(text);}}/>
+        <TouchableOpacity style={{marginRight: 10}} onPress={() => {setCameraModal(true)}}>
+          <Ionicons name="camera-outline" size={30} color="black"/>
+        </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
