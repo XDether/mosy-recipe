@@ -46,7 +46,8 @@ export default function RecipesOverview({navigation, route, dataSet}) {
       {
         console.error(e)
       }
-      }
+    }
+    route.params = undefined
   }
 
   useEffect(()=>{
