@@ -51,10 +51,16 @@ export default function RecipePage(props){
                 <Text style={styles.textSize}>Zubereitung</Text>
               </TouchableOpacity>
           </View>
-          <Iconbar portions={data.portions} time={data.time}/>
-          <Category name = {data.categoryID}/>
-          <View style={{backgroundColor:"black", height: 1}}/>
-          {mode === "ingredients"? <IngredientList ingredients={data.ingredients}/>:<Steps text={data.instructions}/>}
+
+
+          {mode === "ingredients"?
+          <View>
+            <Iconbar portions={data.portions} time={data.time}/>
+            <Category name = {data.categoryID}/>
+            <View style={{backgroundColor:"black", height: 1, marginVertical:10 }}/>
+            <IngredientList ingredients={data.ingredients}/>
+          </View>
+           :<Steps text={data.instructions}/>}
         </View>
     </View>)
 }
