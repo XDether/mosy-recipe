@@ -4,13 +4,13 @@ import { StyleSheet } from 'react-native';
 import MainNavigation from './components/navigations/MainNavigation';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import colors from './components/constants/colors';
+import CameraTest from './components/helpers/CameraTest';
 
 
 export default function App() {
   return(
-    <NavigationContainer theme={{ colors: {...DefaultTheme.colors , background : colors.background}}}>
-      <MainNavigation/>
-    </NavigationContainer>
+    <CameraTest/>
+
   );
 }
 
