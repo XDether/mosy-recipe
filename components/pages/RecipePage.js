@@ -8,6 +8,7 @@ import Iconbar from "../RecipePage/Iconbar";
 import Category from "../RecipePage/Category";
 import IngredientList from "../RecipePage/ingredientList/IngredientList";
 import Steps from "../RecipePage/Steps";
+import colors from "../constants/colors";
 
 export default function RecipePage(props){
     [data,setData] = useState([]);
@@ -40,18 +41,19 @@ export default function RecipePage(props){
     }, []);    
     return (
     <View style={{display:"flex"}}>
-        <ImageBackgroundComp styles={styles} onID ={onID}/>
+        <ImageBackgroundComp styles={styles} onID ={onID} />
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
-              <TouchableOpacity onPress={() => changeMode("ingredients")}>
+              <TouchableOpacity onPress={() => changeMode("ingredients")} style={{ backgroundColor: mode === "ingredients" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
                 <Text style={styles.textSize}>Zutaten</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeMode("steps")}>
+              <TouchableOpacity onPress={() => changeMode("steps")} style={{ backgroundColor: mode === "steps" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
                 <Text style={styles.textSize}>Zubereitung</Text>
               </TouchableOpacity>
           </View>
           <Iconbar portions={data.portions} time={data.time}/>
           <Category name = {data.categoryID}/>
+          <View style={{backgroundColor:"black", height: 1}}/>
           {mode === "ingredients"? <IngredientList ingredients={data.ingredients}/>:<Steps text={data.instructions}/>}
         </View>
     </View>)

@@ -11,7 +11,6 @@ import colors from "../constants/colors";
 import { TextInput } from "react-native";
 import { View } from "react-native";
 import storage from "../helpers/Storage";
-import Recipe from "../models/Recipe";
 
 export default function RecipesOverview({navigation, route, dataSet}) {
   [recipe, setRecipe] = useState([]);
@@ -92,7 +91,7 @@ export default function RecipesOverview({navigation, route, dataSet}) {
     <SafeAreaView>
       <View style={{marginVertical: 10, marginHorizontal: (Dimensions.get("window").width * 0.1) / 4}}>
         <TextInput
-          style={{ height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
+          style={{ fontSize: 16, height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
           placeholder="Search"
           onChangeText={(value)=>
           {
