@@ -24,7 +24,6 @@ export default function RecipesOverview({navigation, route, dataSet}) {
 
   async function Update()
   {
-    console.log("Overview Update")
     const data = await storage.getData();
     if(data != null){
       setFullRecipe(data);
@@ -89,7 +88,7 @@ export default function RecipesOverview({navigation, route, dataSet}) {
   }
 
   return (
-    <SafeAreaView style={style.container}>
+    <SafeAreaView>
       <View style={{marginVertical: 10, marginHorizontal: (Dimensions.get("window").width * 0.1) / 4}}>
         <TextInput
           style={{ height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
@@ -117,9 +116,6 @@ export default function RecipesOverview({navigation, route, dataSet}) {
 }
 
 const style = StyleSheet.create({
-  container: {
-    backgroundColor: "rgb(245, 196, 249)",
-  },
   column: {
   },
   invisible: {

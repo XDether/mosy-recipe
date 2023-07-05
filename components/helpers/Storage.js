@@ -55,7 +55,6 @@ const removeData = async (id) => {
         newData.push(item)
       }
     }
-    //console.log(newData)
     createData(newData)
   } catch(e) {
     // error reading value

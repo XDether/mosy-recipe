@@ -8,7 +8,6 @@ import CategoryScreen from "../pages/CategoryScreen";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import color from "../constants/colors";
 import { Button } from "react-native-elements";
-import { useEffect } from "react";
 
 export default function TabNavigation({navigation, dataSet})
 {
@@ -18,7 +17,6 @@ export default function TabNavigation({navigation, dataSet})
   function handleOnPress()
   {
       navigation.navigate("AddRecipeOverview")
-      console.log(dataSet)
   }
   
   return (

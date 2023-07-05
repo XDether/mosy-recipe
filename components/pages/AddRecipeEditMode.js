@@ -125,7 +125,6 @@ const addInstructions = () => {
   useEffect(() => {
     const getCurrentRecipe = async() => {
       if(props != null && props.route.params?.editingRecipe?.id != undefined){
-        //console.log(editingRecipe)
         const data =  await storage.getDataWithId(props.route.params.editingRecipe.id);
         if(data != null){
           setData(data);
@@ -525,7 +524,7 @@ const addInstructions = () => {
           paddingLeft: 10,
         }}
       >
-        <TouchableOpacity onPress={() => {props.navigation.navigate("Home"); console.log()}}>
+        <TouchableOpacity onPress={() => {props.navigation.navigate("Home");}}>
           <Ionicons name="trash-outline" size={30} color="black" />
         </TouchableOpacity>
 

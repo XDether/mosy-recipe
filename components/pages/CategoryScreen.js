@@ -24,7 +24,6 @@ export default function CategoryScreen({navigation, dataSet}){
       }
       setCategory(unique)
     }
-    console.log("Category Update")
   }
 
   useEffect(()=>{
@@ -37,7 +36,7 @@ export default function CategoryScreen({navigation, dataSet}){
   function CategoryTile({name}) {
     return (
     <TouchableOpacity onPress={()=>{navigation.navigate("Recipes",{categoryID: name})}} >
-      <Text style={{fontSize:16, backgroundColor:colors.accent, borderRadius: 50, paddingHorizontal: 10}}>
+      <Text style={{fontSize:17, fontWeight: 600, backgroundColor:colors.accent, borderRadius: 50, paddingHorizontal: 15, paddingVertical : 5}}>
           {name}
       </Text>
     </TouchableOpacity>)

@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import Tile from "../recipesOverview/Tile";
+import Tile from "../HomePage/Tile";
 import colors from "../constants/colors";
 import storage from "../helpers/Storage";
 
 export default function HomeScreen({navigation}) {
-  [fullRecipe, setFullRecipe] = useState();
-  [recipe, setRecipe] = useState({id: 0, title: "Hellyeah", description: "Nice"});
 
+  [fullRecipe, setFullRecipe] = useState();
+  [reci, setReci] = useState({id: 0});
   
   async function Update() {
     const data = await storage.getData();
     if (data != null) {
       setFullRecipe(data);
-      setRecipe(data[0]);
+      setReci(data[0]);
     }
   }
 
@@ -26,16 +26,16 @@ export default function HomeScreen({navigation}) {
 
   const handleButtonPress = () => {
     const index = Math.floor(Math.random() * fullRecipe.length);
-    setRecipe(fullRecipe[index]);
+    const nextRecipe = fullRecipe[index];
+    setReci(nextRecipe);
   };
 
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <View style={styles.tileContainer}>
         <Tile 
-          id={recipe.id} 
-          title={recipe.title} 
-          description={recipe.description} 
+          id={reci.id} 
+          title={reci.title} 
           navigation={navigation}/>
       </View>
 
