@@ -6,13 +6,13 @@ import storage from "../helpers/Storage";
 
 export default function HomeScreen({navigation}) {
 
-  [fullRecipe, setFullRecipe] = useState();
+  [fullReci, setFullReci] = useState();
   [reci, setReci] = useState({id: 0});
   
   async function Update() {
     const data = await storage.getData();
     if (data != null) {
-      setFullRecipe(data);
+      setFullReci(data);
       setReci(data[0]);
     }
   }
@@ -25,8 +25,8 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   const handleButtonPress = () => {
-    const index = Math.floor(Math.random() * fullRecipe.length);
-    const nextRecipe = fullRecipe[index];
+    const index = Math.floor(Math.random() * fullReci.length);
+    const nextRecipe = fullReci[index];
     setReci(nextRecipe);
   };
 
