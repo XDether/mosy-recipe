@@ -240,6 +240,7 @@ const addInstructions = () => {
                   borderColor: colors.primary,
                   fontSize: 15,
                   padding: 5,
+                  maxWidth: "40%"
                 }}
                 placeholder="Kategorie"
                 value={category}
@@ -266,7 +267,8 @@ const addInstructions = () => {
                   style={{
                     fontSize: 20,
                     textAlign: "center",
-                    marginRight: 5,
+                    marginRight: 10,
+                    maxWidth: "50%"
                   }}
                   placeholder="Zutat hinzufügen"
                   value={ingredientValue}
@@ -274,7 +276,7 @@ const addInstructions = () => {
                 />
                 <TextInput
                   inputMode="numeric"
-                  style={{ fontSize: 20, textAlign: "center" }}
+                  style={{ fontSize: 20, textAlign: "center", maxWidth:"10%" }}
                   value={amountValue}
                   onChangeText={(text) => setAmountValue(text)}
                   placeholder="Menge"

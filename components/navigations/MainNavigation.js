@@ -21,32 +21,7 @@ export default function MainNavigation ()
 
 
   useEffect(() => {
-    const createTestData = async ()=>
-    {
-      await storage.clear();
-      await storage.addData(new Recipe(1,'Food','Beef',
-      [
-        {amount:'3',ingredient:'beef'},
-        {amount:'3',ingredient:'Salt'}
-      ]
-      ,['Just Put that salt on da beef'],'a beefy recipe',"3hrs","3port"))
-
-      await storage.addData(new Recipe(2,'Brick','Yerkeys',
-      [
-        {amount:'2',ingredient:'beef'},
-        {amount:'3',ingredient:'Salt'}
-      ]
-      ,['Just Put that salt on da beef'],'a beefuy recipe',"3hrs","3port"));
-
-      await storage.addData(new Recipe(3,'Brick','Yerkeasdys',
-      [
-        {amount:'2',ingredient:'beasdef'},
-        {amount:'3',ingredient:'Saasdlt'}
-      ]
-      ,['Just Put thatasd salt on da beef'],'a beefuy recipe',"3hrs","3port"));
-    }
-
-    //createTestData();
+    //storage.clear();
   }, []);
 
   const navigation = useNavigation();

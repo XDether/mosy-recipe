@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Recipe from '../models/Recipe';
 
 const createData = async (value) => {
   try {
@@ -19,9 +20,8 @@ const getData = async () => {
     for(let item of values){
       allData.push(JSON.parse(item[1]));
     }
-    console.log(allData[0])
-    return allData
 
+    return allData
   } catch(e) {
     // error reading value
     console.log(e);
@@ -44,7 +44,7 @@ const addData = async (value) => {
     await AsyncStorage.setItem("id"+value.id, jsonValue)
   } catch (e) {
     // saving error
-    console.error(e)
+    console.log(e)
   }
 }
 
@@ -90,4 +90,29 @@ const generateIDFromData = (data) =>
 const clear = async ()=>{
   await AsyncStorage.clear()
 }
-export default {getData, clear,createData, mergeData, addData,removeData, getDataWithId, generateIDFromData}
+
+const createTestData = async ()=>
+{
+  await clear();
+  await addData(new Recipe(1,'Food','Beef',
+  [
+    {amount:'3',ingredient:'beef'},
+    {amount:'3',ingredient:'Salt'}
+  ]
+  ,['Just Put that salt on da beef'],'a beefy recipe',"3hrs","3port"))
+
+  await addData(new Recipe(2,'Brick','Yerkeys',
+  [
+    {amount:'2',ingredient:'beef'},
+    {amount:'3',ingredient:'Salt'}
+  ]
+  ,['Just Put that salt on da beef'],'a beefuy recipe',"3hrs","3port"));
+
+  await addData(new Recipe(3,'Brick','Yerkeasdys',
+  [
+    {amount:'2',ingredient:'beasdef'},
+    {amount:'3',ingredient:'Saasdlt'}
+  ]
+  ,['Just Put thatasd salt on da beef'],'a beefuy recipe',"3hrs","3port"));
+}
+export default {getData, clear,createData, mergeData, addData,removeData, getDataWithId, generateIDFromData, createTestData}

@@ -6,16 +6,14 @@ import storage from "../helpers/Storage";
 
 export default function HomeScreen({navigation}) {
 
-  [fullReci, setFullReci] = useState();
-  [reci, setReci] = useState("");
+  [fullReci, setFullReci] = useState([{id:0}]);
+  [reci, setReci] = useState({id:0});
   
   async function Update() {
     const data = await storage.getData();
-    if (data) {
-      setFullReci(data);
-      setReci(data[0])
-    }
+    setFullReci(data);
   }
+  
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       Update();
@@ -24,9 +22,11 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   const handleButtonPress = () => {
-    const index = Math.floor(Math.random() * fullReci.length);
-    const nextRecipe = fullReci[index];
-    setReci(nextRecipe);
+    if(fullReci[0]){
+      const index = Math.floor(Math.random() * fullReci.length);
+      const nextRecipe = fullReci[index];
+      setReci(nextRecipe);
+    }
   };
 
   return (

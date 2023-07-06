@@ -3,19 +3,19 @@ import { StyleSheet, Text, View, Button, Image, Modal } from "react-native";
 import { Camera, requestCameraPermissionsAsync, CameraType } from "expo-camera";
 
 export default function CameraTest({ setImage, setCameraModal, cameraModal }) {
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [hasCameraPermission, setHasCameraPermission] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [camera, setCamera] = useState(null);
   const [type, setType] = useState(CameraType.back);
   useEffect(() => {
     (async () => {
-      const cameraStatus = await requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === "granted");
+      //const cameraStatus = await requestCameraPermissionsAsync();
+      //setHasCameraPermission(cameraStatus.status === "granted");
     })();
   }, []);
 
   if (hasCameraPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>{/*No access to camera*/}</Text>;
   }
 
   const takePicture = async () => {
