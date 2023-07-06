@@ -46,7 +46,7 @@ export default function MainNavigation ()
       ,['Just Put thatasd salt on da beef'],'a beefuy recipe',"3hrs","3port"));
     }
 
-    createTestData();
+    //createTestData();
   }, []);
 
   const navigation = useNavigation();
