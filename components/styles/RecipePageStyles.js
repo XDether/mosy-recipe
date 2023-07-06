@@ -7,7 +7,7 @@ export default StyleSheet.create({
     },
     imageContainer: {
       paddingBottom: 50,
-      maxHeight: 200,
+      maxHeight:Dimensions.get("window").height/5,
       overflow: "hidden",
       marginBottom: 20
     },
