@@ -9,6 +9,7 @@ import Category from "../RecipePage/Category";
 import IngredientList from "../RecipePage/ingredientList/IngredientList";
 import Steps from "../RecipePage/Steps";
 import colors from "../constants/colors";
+import { Dimensions } from "react-native";
 
 export default function RecipePage(props){
     [data,setData] = useState([]);
@@ -40,7 +41,7 @@ export default function RecipePage(props){
         UpdateRecipe()
     }, []);    
     return (
-    <View style={{display:"flex"}}>
+    <View style={{display:"flex", height: Dimensions.get("window").height/2.5}}>
         <ImageBackgroundComp styles={styles} onID ={onID} />
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
