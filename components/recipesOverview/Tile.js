@@ -1,9 +1,8 @@
 import React from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { images } from "../constants/images";
 import colors from "../constants/colors";
 
-export default function Tile({ id,title, description, invisible, navigation, isCategory }) {  
+export default function Tile({ id,title, description, invisible, navigation, isCategory, image }) {  
   const onPressHandler = () => {
     navigation.navigate('RecipePage', {id:id});
   };
@@ -17,7 +16,7 @@ export default function Tile({ id,title, description, invisible, navigation, isC
       <TouchableOpacity onPress={isCategory? onPressHandlerCategory : onPressHandler}>
         <View style={styles.container}>
 
-          <Image source={images[Math.floor(Math.random() * 3)+1]} style={styles.image} />
+          <Image source={{uri:image?image:null}} style={styles.image} />
           <View style={styles.textbox}>
             <Text style={styles.description}>{isCategory ? description : title}</Text>
           </View>

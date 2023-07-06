@@ -9,7 +9,6 @@ import Category from "../RecipePage/Category";
 import IngredientList from "../RecipePage/ingredientList/IngredientList";
 import Steps from "../RecipePage/Steps";
 import colors from "../constants/colors";
-import { Dimensions } from "react-native";
 
 export default function RecipePage(props){
     [data,setData] = useState([]);
@@ -43,7 +42,7 @@ export default function RecipePage(props){
     }, []);    
     return (
     <View style={{display:"flex"}}>
-        <ImageBackgroundComp styles={styles} onID ={onID} />
+        <ImageBackgroundComp styles={styles} onID ={onID} src={data.image}/>
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
               <TouchableOpacity onPress={() => changeMode("ingredients")} style={{ backgroundColor: mode === "ingredients" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
