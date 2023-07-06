@@ -547,7 +547,8 @@ const addInstructions = () => {
 } else{
   return(
     <View style={{overflow: "scroll", height: "100%"}}>
-      <ImageBackgroundComponent recipeTITLE={titleValue} changeTitle={changeTitle} />
+      <ImageBackgroundComponent recipeTITLE={titleValue} changeTitle={changeTitle} setCameraModal={setCameraModal} imageSRC={newImage ? newImage : null}/>
+      <CameraTest setImage={setNewImage} cameraModal={cameraModal} setCameraModal={setCameraModal} />
       <View style={styles.textContainer}>
         <View style={styles.textRow}>
           <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() =>changeMode("ingredients")}>
@@ -612,7 +613,7 @@ const addInstructions = () => {
             </View>
 
             <View>
-              <SafeAreaView style={{ height: "100%", padding: 5 }}>
+              <SafeAreaView style={{ height: "80%", padding: 5 }}>
                 <ScrollView
                     style={{ paddingBottom: 5 }}
                     contentContainerStyle={{ marginBottom: 5 }}>
@@ -826,7 +827,7 @@ const ImageBackgroundComponent = ({imageSRC, recipeTITLE, changeTitle, setCamera
       source={{uri: imageSRC} }>
         <View style={{position: 'absolute', bottom: 0, flexDirection: 'row', alignItems: 'center', width: "100%",backgroundColor: 'rgba(211,211,211, 0.5)', justifyContent: 'space-between'}}>
         <TextInput style={{fontSize: 20,marginLeft: 10, color: "black", maxWidth: "85%"}} placeholder={recipeTITLE} value={recipeTITLE} onChangeText={(text) => {changeTitle(text);}}/>
-        <TouchableOpacity style={{marginRight: 10}} onPress={() => {setCameraModal(true)}}>
+        <TouchableOpacity style={{marginRight: 10}} onPress={() => {console.log("nice"); setCameraModal(true)}}>
           <Ionicons name="camera-outline" size={30} color="black"/>
         </TouchableOpacity>
         </View>
