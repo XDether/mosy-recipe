@@ -26,10 +26,9 @@ export default function CameraTest({ setImage, setCameraModal, cameraModal }) {
       
       const stringLength = result.base64.length;
 
-      const sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
-      const sizeInKb= sizeInBytes/1000;
-
-      console.log("FileSize: " + sizeInKb);
+      //const sizeInBytes = 4 * Math.ceil((stringLength / 3))*0.5624896334383812;
+      //const sizeInKb= sizeInBytes/1000;
+      //console.log("FileSize: " + sizeInKb);
       
 
       setImage("data:image/png;base64,"+result.base64);
