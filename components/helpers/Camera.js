@@ -32,7 +32,7 @@ export default function CameraTest({ setImage, setCameraModal, cameraModal }) {
       console.log("FileSize: " + sizeInKb);
       
 
-      setImage("data:image/png;base64,"+data.base64);
+      setImage("data:image/png;base64,"+result.base64);
       setCameraModal(false);
     }
   };
