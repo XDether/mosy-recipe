@@ -21,7 +21,7 @@ export default function MainNavigation ()
 
 
   useEffect(() => {
-    //storage.clear();
+    storage.clear();
   }, []);
 
   const navigation = useNavigation();
