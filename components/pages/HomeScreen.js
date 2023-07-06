@@ -25,9 +25,9 @@ export default function HomeScreen({navigation}) {
   }, []);
 
   const handleButtonPress = () => {
-    const index = Math.floor(Math.random() * fullReci.length);
-    const nextRecipe = fullReci[index];
-    setReci(nextRecipe);
+    // const index = Math.floor(Math.random() * fullReci.length);
+    // const nextRecipe = fullReci[index];
+    // setReci(nextRecipe);
   };
 
   return (

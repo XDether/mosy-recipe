@@ -31,7 +31,8 @@ export default function AddRecipeOverview({ navigation, setTempRecipe }) {
       recipeJSON.instructions,
       recipeJSON.description,
       recipeJSON.portionSize,
-      recipeJSON.time
+      recipeJSON.time,
+      recipeJSON.image
     ));
     navigation.navigate("RecipePage", {id: newID});
   }

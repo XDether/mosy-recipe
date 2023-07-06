@@ -23,10 +23,13 @@ export default function RecipesOverview({navigation, route, dataSet}) {
 
   async function Update()
   {
+   
     const data = await storage.getData();
     if(data != null){
+
       setFullRecipe(data);
       setRecipe(data);
+
     }
 
     if(route.params)
