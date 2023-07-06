@@ -19,6 +19,7 @@ const getData = async () => {
     for(let item of values){
       allData.push(JSON.parse(item[1]));
     }
+    console.log(allData[0])
     return allData
 
   } catch(e) {
@@ -30,7 +31,7 @@ const getData = async () => {
 const getDataWithId = async (id) => {
   try {
     const value = await AsyncStorage.getItem("id"+id);
-    return value
+    return JSON.parse(value);
   } catch(e) {
     // error reading value
     console.log(e);
@@ -86,4 +87,7 @@ const generateIDFromData = (data) =>
   }
 }
 
-export default {getData, createData, mergeData, addData,removeData, getDataWithId, generateIDFromData}
+const clear = async ()=>{
+  await AsyncStorage.clear()
+}
+export default {getData, clear,createData, mergeData, addData,removeData, getDataWithId, generateIDFromData}

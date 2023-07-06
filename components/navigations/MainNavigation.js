@@ -23,6 +23,7 @@ export default function MainNavigation ()
   useEffect(() => {
     const createTestData = async ()=>
     {
+      await storage.clear();
       await storage.addData(new Recipe(1,'Food','Beef',
       [
         {amount:'3',ingredient:'beef'},

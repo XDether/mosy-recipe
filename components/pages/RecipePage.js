@@ -25,6 +25,7 @@ export default function RecipePage(props){
         {
           if(props != null){
             const data = await storage.getDataWithId(props.route.params.id);
+            console.log(data)
             if(data != null){
               setData(data);
               setOnID(props.route.params.id);
