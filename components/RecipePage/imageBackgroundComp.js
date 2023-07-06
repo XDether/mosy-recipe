@@ -3,14 +3,14 @@ import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
 import Ionicon from "@expo/vector-icons/Ionicons";
 import storage from "../helpers/Storage";
 import { useNavigation } from "@react-navigation/native";
-export default function ImageBackgroundComp({styles, onID, src}){
+export default function ImageBackgroundComp({styles, onID, src,}){
     const navigation = useNavigation()
     return (
     <View style={styles.imageContainer}>
         <ImageBackground
           style={styles.image}
           resizeMode="cover"
-          source={src ? src : require("../../assets/pic1.jpg")}
+          source={{uri:src ? src:null}}
         >
           <TouchableOpacity style = {{position:"absolute", top:10, right: 10}} onPress={async()=>{
             await storage.removeData(onID)
