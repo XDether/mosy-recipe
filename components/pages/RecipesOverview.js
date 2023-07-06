@@ -105,15 +105,17 @@ export default function RecipesOverview({navigation, route, dataSet}) {
           value = {searchTerm}
         />
       </View>
-      <FlatList
-        data={recipe}
-        horizontal={false}
-        numColumns={2}
-        renderItem={({ item }) => <Tile {...item} navigation={navigation}/>}
-        keyExtractor={(item) => item.id}
-        style={style.column}
-        columnWrapperStyle={style.columnWrapperStyle}
-      />
+      <View style={{height:"90%"}}>
+        <FlatList
+          data={recipe}
+          horizontal={false}
+          numColumns={2}
+          renderItem={({ item }) => <Tile {...item} navigation={navigation}/>}
+          keyExtractor={(item) => item.id}
+          style={style.column}
+          columnWrapperStyle={style.columnWrapperStyle}
+        />
+      </View>
     </SafeAreaView>
   );
 }

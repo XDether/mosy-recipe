@@ -6,6 +6,7 @@ import { FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import storage from "../helpers/Storage";
 import colors from "../constants/colors";
+import { View } from "react-native";
 
 export default function CategoryScreen({navigation, dataSet}){
   [category, setCategory] = useState([]);
@@ -44,15 +45,17 @@ export default function CategoryScreen({navigation, dataSet}){
 
   return (
       <SafeAreaView>
-        <FlatList 
-          numColumns={3}
-          data = {category}
-          renderItem={({item}) => <CategoryTile name = {item.categoryID}/>}
-          columnWrapperStyle={{
-            justifyContent: "space-between",
-            margin: (Dimensions.get("window").width * 0.3) / 4
-          }}
-        />
+        <View style={{height:"90%"}}>
+          <FlatList 
+            numColumns={3}
+            data = {category}
+            renderItem={({item}) => <CategoryTile name = {item.categoryID}/>}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
+              margin: (Dimensions.get("window").width * 0.3) / 4
+            }}
+          />
+        </View>
       </SafeAreaView>
   )
 } 
