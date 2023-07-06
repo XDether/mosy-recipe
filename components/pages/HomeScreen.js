@@ -13,7 +13,7 @@ export default function HomeScreen({navigation}) {
     const data = await storage.getData();
     setFullReci(data);
   }
-  
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       Update();
@@ -35,6 +35,7 @@ export default function HomeScreen({navigation}) {
         <Tile 
           id={reci.id} 
           title={reci.title} 
+          image={reci.image}
           navigation={navigation}/>
       </View>
 
