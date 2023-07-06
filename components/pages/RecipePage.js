@@ -41,7 +41,7 @@ export default function RecipePage(props){
         UpdateRecipe()
     }, []);    
     return (
-    <View style={{display:"flex", height: Dimensions.get("window").height/2.5}}>
+    <View style={{display:"flex"}}>
         <ImageBackgroundComp styles={styles} onID ={onID} />
         <View style={styles.textContainer}>
           <View style={styles.textRow}>
