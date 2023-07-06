@@ -613,7 +613,7 @@ const addInstructions = () => {
             </View>
 
             <View>
-              <SafeAreaView style={{ height: "75%", padding: 5 }}>
+              <SafeAreaView style={{ height: Dimensions.get("window").height/3.8, padding: 5 }}>
                 <ScrollView
                     style={{ paddingBottom: 5 }}
                     contentContainerStyle={{ marginBottom: 5 }}>
@@ -771,7 +771,7 @@ const addInstructions = () => {
             </View>
             {instructions.length > 0 ? (
               <SafeAreaView style={{padding:20}}>
-                <ScrollView style={{paddingBottom: 5, height: "75%"}} contentContainerStyle={{marginBottom: 5}}>
+                <ScrollView style={{paddingBottom: 5, height: Dimensions.get("window").height/2.2}} contentContainerStyle={{marginBottom: 5}}>
                     {instructions.map((instruction, index) => {
                       return (
                         <View style={{width: "100%", flexDirection:'row', paddingBottom: 20}} key={index}>
