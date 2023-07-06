@@ -1,9 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer'
 
-import AddRecipeOverview from '../../components/pages/AddRecipeOverview'
+import CategoryScreen from '../../components/pages/CategoryScreen'
 
 it('renders correctly', () => {
-  const tree = renderer.create(<AddRecipeOverview />).toJSON();
+  const tree = renderer.create(<CategoryScreen />).toJSON();
   expect(tree).toMatchSnapshot();
 });

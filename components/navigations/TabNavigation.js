@@ -9,14 +9,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import color from "../constants/colors";
 import { Button } from "react-native-elements";
 
-export default function TabNavigation({navigation})
+export default function TabNavigation({navigation, dataSet})
 {
   const Tab = createBottomTabNavigator();
+
+
   function handleOnPress()
   {
       navigation.navigate("AddRecipeOverview")
   }
-
+  
   return (
     <Tab.Navigator
         screenOptions={({ route }) => ({
@@ -26,7 +28,7 @@ export default function TabNavigation({navigation})
           },
           tabBarShowLabel: false,
           tabBarStyle:{
-            backgroundColor: color.primary,
+          backgroundColor: color.primary,
             borderRadius: 100,
             marginHorizontal:20,
             marginBottom: 10,
@@ -57,9 +59,16 @@ export default function TabNavigation({navigation})
         })}
       >
 
-      <Tab.Screen name = "Home" component={HomeScreen}/>
-      <Tab.Screen name = "Recipes" component={RecipesOverview}/>
-      <Tab.Screen name = "Categorys" component={CategoryScreen}/>
+      <Tab.Screen name = "Home" options={{title:"Heimat"}}>
+        {(props) => <HomeScreen {...props} dataSet={dataSet}/>}
+      </Tab.Screen>
+      <Tab.Screen name = "Recipes" options={{title:"Rezepte"}}>
+        {(props) => <RecipesOverview {...props} dataSet={dataSet}/>}
+      </Tab.Screen>
+      <Tab.Screen name = "Categorys" options={{title:"Kategorien"}}>
+      {(props) => <CategoryScreen {...props} dataSet={dataSet}/>}
+      </Tab.Screen>
+      
     </Tab.Navigator>
   )
 }
