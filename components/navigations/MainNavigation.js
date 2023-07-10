@@ -5,7 +5,6 @@ import AddRecipeEditMode from "../pages/AddRecipeEditMode";
 import TabNavigation from  "./TabNavigation";
 import RecipePage from "../pages/RecipePage";
 import colors from "../constants/colors";
-import storage from "../helpers/Storage";
 import { TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
@@ -16,13 +15,8 @@ export default function MainNavigation ()
   const [tempRecipe, setTempRecipe] = useState({link:""})
   const [dataSet, setDataSet] = useState([]);
   const Stack = createNativeStackNavigator();
-
-
-  useEffect(() => {
-    storage.createTestData()
-  }, []);
-
   const navigation = useNavigation();
+  
   const BackButton = () =>{
     return(
     <TouchableOpacity 
