@@ -5,10 +5,8 @@ import { FlatList } from "react-native";
 
 export default function Steps({text}){
     return (
-    <View style={{height: Dimensions.get("window" ).height / 2}}>
-        <FlatList data = {text}
-            renderItem={({item}) => { return <Text style={{fontSize:16, fontWeight:600}}>{item}</Text>}}
-        />
-    </View>
+    <FlatList data = {text}
+        renderItem={({item}) => { return <Text style={{fontSize:16, fontWeight:600}}>{item}</Text>}}
+    />
     )
 }

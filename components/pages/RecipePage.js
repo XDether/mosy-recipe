@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Text, View, TouchableOpacity, Button } from "react-native";
+import { Text, View, TouchableOpacity, Button, SafeAreaView } from "react-native";
 import storage from "../helpers/Storage";
-import styles from '../styles/RecipePageStyles'
 import ImageBackgroundComp from "../RecipePage/imageBackgroundComp";
 import Iconbar from "../RecipePage/Iconbar";
 import Category from "../RecipePage/Category";
@@ -12,7 +11,7 @@ import colors from "../constants/colors";
 
 export default function RecipePage(props){
     [data,setData] = useState([]);
-    const [mode, setMode] = useState("ingredients");
+    [mode, setMode] = useState("ingredients");
     [onID, setOnID] = useState("3");
 
     const changeMode = (newMode) => {
@@ -36,31 +35,24 @@ export default function RecipePage(props){
             }
           }
         }
-        
         UpdateRecipe()
     }, []);    
     return (
-    <View style={{display:"flex"}}>
-        <ImageBackgroundComp styles={styles} onID ={onID} src={data.image}/>
-        <View style={styles.textContainer}>
-          <View style={styles.textRow}>
-              <TouchableOpacity onPress={() => changeMode("ingredients")} style={{ backgroundColor: mode === "ingredients" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
-                <Text style={styles.textSize}>Zutaten</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => changeMode("steps")} style={{ backgroundColor: mode === "steps" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
-                <Text style={styles.textSize}>Zubereitung</Text>
-              </TouchableOpacity>
-          </View>
-
-
-          {mode === "ingredients"?
-          <View>
-            <Iconbar portions={data.portions} time={data.time}/>
-            <Category name = {data.categoryID}/>
-            <View style={{backgroundColor:"black", height: 1, marginVertical:10 }}/>
-            <IngredientList ingredients={data.ingredients}/>
-          </View>
-           :<Steps text={data.instructions}/>}
+    <SafeAreaView style={{flex : 1, paddingHorizontal: 12}}>
+      <ImageBackgroundComp onID ={onID} src={data.image}/>
+        <View style={{ flexDirection: "row", justifyContent: "space-evenly", gap: 30}}>
+            <TouchableOpacity onPress={() => changeMode("ingredients")} style={{ backgroundColor: mode === "ingredients" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
+              <Text style={{ fontSize: 20,}}>Zutaten</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => changeMode("steps")} style={{ backgroundColor: mode === "steps" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
+              <Text style={{ fontSize: 20,}}>Zubereitung</Text>
+            </TouchableOpacity>
         </View>
-    </View>)
+        
+        <Iconbar portions={data.portions} time={data.time}/>
+        <Category name = {data.categoryID}/>
+        <View style={{backgroundColor:"black", height: 1, marginVertical:10 }}/>
+
+        {mode === "ingredients" ? <IngredientList ingredients={data.ingredients}/>:<Steps text={data.instructions}/>}
+    </SafeAreaView>)
 }
