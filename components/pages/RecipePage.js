@@ -49,8 +49,9 @@ export default function RecipePage(props){
             </TouchableOpacity>
         </View>
         
-        <Iconbar portions={data.portions} time={data.time}/>
-        <Category name = {data.categoryID}/>
+        
+        {mode === "ingredients" ? <Iconbar portions={data.portions} time={data.time}/> : null}
+        {mode === "ingredients" ? <Category name = {data.categoryID}/> : null}
         <View style={{backgroundColor:"black", height: 1, marginVertical:10 }}/>
 
         {mode === "ingredients" ? <IngredientList ingredients={data.ingredients}/>:<Steps text={data.instructions}/>}
