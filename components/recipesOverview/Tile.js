@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     width: "90%",
   },
   textbox: {
-    height: "20%",
+    height: 42,
   },
   invisible: {
     backgroundColor: "transparent",
