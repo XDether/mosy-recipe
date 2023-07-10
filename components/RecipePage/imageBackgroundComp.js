@@ -4,7 +4,7 @@ import Ionicon from "@expo/vector-icons/Ionicons";
 import storage from "../helpers/Storage";
 import { useNavigation } from "@react-navigation/native";
 import { Dimensions } from "react-native";
-export default function ImageBackgroundComp({ onID, src,}){
+export default function ImageBackgroundComp({ onID, src, description}){
     const navigation = useNavigation()
     return (
       <View  style={{maxHeight: 135, height: 135, marginBottom: 15, alignSelf: "center", width: Dimensions.get("window").width }} >
@@ -20,8 +20,8 @@ export default function ImageBackgroundComp({ onID, src,}){
               <Ionicon name="trash" color="white" size={24}></Ionicon>
           </TouchableOpacity>
         
-          <View style={{}}>
-            <Text style={{}}>"nice"</Text>
+          <View style={{position:"absolute" , bottom: 10, left: 10}}>
+            <Text style={{color: "black", display:"none"}}>{description}</Text>
           </View>
         </ImageBackground>
       </View>

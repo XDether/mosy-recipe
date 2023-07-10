@@ -48,7 +48,7 @@ export default [
         'https://img.chefkoch-cdn.de/rezepte/3089761461661487/bilder/1509483/crop-642x428/gefuellte-zucchini-aus-dem-ofen.jpg'),
     new Recipe(
         2,
-        'Gemüse',
+        'Hauptspeise',
         'Chili con Carne',
         [
             {amount:'800', unit: "g", ingredient:'Rinderhackfleisch oder halb und halb'},
@@ -125,7 +125,7 @@ export default [
         'https://img.chefkoch-cdn.de/rezepte/3089761461661487/bilder/1509483/crop-642x428/gefuellte-zucchini-aus-dem-ofen.jpg'),
     new Recipe(
         5,
-        'Gemüse',
+        'Hauptspeise',
         'Chili con Carne',
         [
             {amount:'800', unit: "g", ingredient:'Rinderhackfleisch oder halb und halb'},
@@ -202,7 +202,7 @@ export default [
         'https://img.chefkoch-cdn.de/rezepte/3089761461661487/bilder/1509483/crop-642x428/gefuellte-zucchini-aus-dem-ofen.jpg'),
     new Recipe(
         8,
-        'Gemüse',
+        'Hauptspeise',
         'Chili con Carne',
         [
             {amount:'800', unit: "g", ingredient:'Rinderhackfleisch oder halb und halb'},
@@ -279,7 +279,7 @@ export default [
         'https://img.chefkoch-cdn.de/rezepte/3089761461661487/bilder/1509483/crop-642x428/gefuellte-zucchini-aus-dem-ofen.jpg'),
     new Recipe(
         11,
-        'Gemüse',
+        'Hauptspeise',
         'Chili con Carne',
         [
             {amount:'800', unit: "g", ingredient:'Rinderhackfleisch oder halb und halb'},

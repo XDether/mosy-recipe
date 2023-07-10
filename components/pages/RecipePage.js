@@ -39,7 +39,7 @@ export default function RecipePage(props){
     }, []);    
     return (
     <SafeAreaView style={{flex : 1, paddingHorizontal: 12}}>
-      <ImageBackgroundComp onID ={onID} src={data.image}/>
+      <ImageBackgroundComp onID ={onID} src={data.image} description={data.description}/>
         <View style={{ flexDirection: "row", justifyContent: "space-evenly", gap: 30}}>
             <TouchableOpacity onPress={() => changeMode("ingredients")} style={{ backgroundColor: mode === "ingredients" ? colors.primary:colors.background, borderRadius:50, paddingHorizontal:15, paddingVertical: 5}}>
               <Text style={{ fontSize: 20,}}>Zutaten</Text>
