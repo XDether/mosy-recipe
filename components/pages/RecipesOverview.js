@@ -92,7 +92,7 @@ export default function RecipesOverview({navigation, route, dataSet}) {
   }
 
   return (
-    <SafeAreaView style={{paddingBottom: Platform.OS === "android" ? 25: 0, flex: 1}}>
+    <SafeAreaView style={{flex: 1}}>
       <View style={{marginVertical: 10}}>
         <TextInput
           style={{ fontSize: 16, height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
