@@ -3,12 +3,13 @@ import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
 import Ionicon from "@expo/vector-icons/Ionicons";
 import storage from "../helpers/Storage";
 import { useNavigation } from "@react-navigation/native";
-export default function ImageBackgroundComp({styles, onID, src,}){
+import { Dimensions } from "react-native";
+export default function ImageBackgroundComp({ onID, src, description}){
     const navigation = useNavigation()
     return (
-    <View style={styles.imageContainer}>
+      <View  style={{maxHeight: 135, height: 135, marginBottom: 15, alignSelf: "center", width: Dimensions.get("window").width }} >
         <ImageBackground
-          style={styles.image}
+          style={{ height: 135 }}
           resizeMode="cover"
           source={{uri:src ? src:null}}
         >
@@ -19,8 +20,8 @@ export default function ImageBackgroundComp({styles, onID, src,}){
               <Ionicon name="trash" color="white" size={24}></Ionicon>
           </TouchableOpacity>
         
-          <View style={styles.textOnImage}>
-            <Text style={styles.imageText}>------</Text>
+          <View style={{position:"absolute" , bottom: 10, left: 10}}>
+            <Text style={{color: "black", display:"none"}}>{description}</Text>
           </View>
         </ImageBackground>
       </View>

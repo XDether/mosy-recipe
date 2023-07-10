@@ -2,14 +2,12 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  Button,
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
 
 import * as cheerio from "cheerio";
-import { Divider, Input } from "react-native-elements";
 import colors from "../constants/colors"
 import { TouchableOpacity } from "react-native";
 import storage from "../helpers/Storage";
@@ -18,7 +16,7 @@ import Recipe from "../models/Recipe";
 export default function AddRecipeOverview({ navigation, setTempRecipe }) {
   const [link, setLink] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [chefkochID, setChefkochID] = useState();
+  //const [chefkochID, setChefkochID] = useState();
 
   const saveChefkochToData = async (recipeJSON) =>{
     const allRecipes = await storage.getData();
