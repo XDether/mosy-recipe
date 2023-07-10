@@ -20,7 +20,6 @@ export default function Tile({ id,title, description, invisible, navigation, isC
           <View style={styles.textbox}>
             <Text style={styles.description}>{isCategory ? description : title}</Text>
           </View>
-
         </View>
       </TouchableOpacity>
     );
@@ -35,6 +34,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     flexDirection: "column",
     aspectRatio: 0.9,
+    paddingBottom: 10
   },
   image: {
     height: "70%",
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     color: "black",
+    textAlign: "center"
   },
   placeholder: {
     backgroundColor: "white",

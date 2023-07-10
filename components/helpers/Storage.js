@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Recipe from '../models/Recipe';
+import TestData from './TestData';
 
 const createData = async (value) => {
   try {
@@ -94,12 +94,10 @@ const clear = async ()=>{
 const createTestData = async ()=>
 {
   await clear();
-
-  await addData(new Recipe(2,'Brick','Yerkeys',
-  [
-    {amount:'2',ingredient:'beef'},
-    {amount:'3',ingredient:'Salt'}
-  ]
-  ,['Just Put that salt on da beef'],'a beefuy recipe',"3hrs","3port"));
+  for(item of TestData)
+  {
+    addData(item);
+  }
 }
+
 export default {getData, clear,createData, mergeData, addData,removeData, getDataWithId, generateIDFromData, createTestData}

@@ -7,8 +7,9 @@ import { Dimensions } from "react-native";
 export default function ImageBackgroundComp({ onID, src,}){
     const navigation = useNavigation()
     return (
+      <View  style={{maxHeight: 135, height: 135, marginBottom: 15, alignSelf: "center", width: Dimensions.get("window").width }} >
         <ImageBackground
-          style={{maxHeight: 135, height: 135, marginBottom: 15, alignSelf: "center", width: Dimensions.get("window").width }}
+          style={{ height: 135 }}
           resizeMode="cover"
           source={{uri:src ? src:null}}
         >
@@ -23,5 +24,6 @@ export default function ImageBackgroundComp({ onID, src,}){
             <Text style={{}}>"nice"</Text>
           </View>
         </ImageBackground>
+      </View>
     )
 }
