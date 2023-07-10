@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Dimensions,
+  Platform,
 } from "react-native";
 
 import Tile from "../recipesOverview/Tile";
@@ -91,8 +92,8 @@ export default function RecipesOverview({navigation, route, dataSet}) {
   }
 
   return (
-    <SafeAreaView>
-      <View style={{marginVertical: 10, marginHorizontal: (Dimensions.get("window").width * 0.1) / 4}}>
+    <SafeAreaView style={{paddingBottom: Platform.OS === "android" ? 25: 0}}>
+      <View>
         <TextInput
           style={{ fontSize: 16, height: 40, borderColor: colors.accent, borderWidth: 2, borderRadius:100,overflow: "scroll", textAlign:"center" }}
           placeholder="Search"
@@ -105,17 +106,15 @@ export default function RecipesOverview({navigation, route, dataSet}) {
           value = {searchTerm}
         />
       </View>
-      <View style={{height:"90%"}}>
-        <FlatList
-          data={recipe}
-          horizontal={false}
-          numColumns={2}
-          renderItem={({ item }) => <Tile {...item} navigation={navigation}/>}
-          keyExtractor={(item) => item.id}
-          style={style.column}
-          columnWrapperStyle={style.columnWrapperStyle}
-        />
-      </View>
+      <FlatList
+        data={recipe}
+        horizontal={false}
+        numColumns={2}
+        renderItem={({ item }) => <Tile {...item} navigation={navigation}/>}
+        keyExtractor={(item) => item.id}
+        style={style.column}
+        columnWrapperStyle={style.columnWrapperStyle}
+      />
     </SafeAreaView>
   );
 }

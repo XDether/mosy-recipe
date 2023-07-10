@@ -94,28 +94,6 @@ const clear = async ()=>{
 const createTestData = async ()=>
 {
   await clear();
-  await addData(new Recipe(1,'Food','Beef',
-  [
-    {amount:'3',ingredient:'beef'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-    {amount:'3',ingredient:'Salt'},
-  ]
-  ,['Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beefJust Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef Just Put that salt on da beef'],'a beefy recipe',"3hrs","3port"))
 
   await addData(new Recipe(2,'Brick','Yerkeys',
   [
@@ -123,12 +101,5 @@ const createTestData = async ()=>
     {amount:'3',ingredient:'Salt'}
   ]
   ,['Just Put that salt on da beef'],'a beefuy recipe',"3hrs","3port"));
-
-  await addData(new Recipe(3,'Brick','Yerkeasdys',
-  [
-    {amount:'2',ingredient:'beasdef'},
-    {amount:'3',ingredient:'Saasdlt'}
-  ]
-  ,['Just Put thatasd salt on da beef'],'a beefuy recipe',"3hrs","3port"));
 }
 export default {getData, clear,createData, mergeData, addData,removeData, getDataWithId, generateIDFromData, createTestData}

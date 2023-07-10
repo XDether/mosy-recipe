@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Text, View, ImageBackground, TouchableOpacity, TextInput} from "react-native";
+import {View, ImageBackground, TouchableOpacity, TextInput} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 export default function ImageBackgroundComp({styles, imageSRC, recipeTitle, setRecipeTitle}){
   

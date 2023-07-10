@@ -7,7 +7,6 @@ import styles from "../styles/AddRecipeEditModeStyle";
 import unitJSON from "../partials/units";
 import storage from "../helpers/Storage.js";
 import Recipe from "../models/Recipe.js";
-import { Divider } from "react-native-elements";
 import colors from "../constants/colors.js";
 import CameraTest from '../helpers/Camera';
 
