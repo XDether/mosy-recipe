@@ -180,25 +180,11 @@ const addInstructions = () => {
       <CameraTest setImage={setNewImage} cameraModal={cameraModal} setCameraModal={setCameraModal} />
       <View style={styles.textContainer}>
         <View style={styles.textRow}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: colors.accent,
-              borderRadius: 15,
-              paddingHorizontal: 10,
-            }}
-            onPress={() => changeMode("ingredients")}
-          >
-            <Text style={styles.textSize}>Zutaten</Text>
+          <TouchableOpacity style={{backgroundColor: mode === "ingredients" ? colors.primary:colors.background, borderRadius: 50, paddingHorizontal: 15, paddingVertical: 5}} onPress={() =>changeMode("ingredients")}>
+            <Text style={{fontSize: 20}}>Zutaten</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              backgroundColor: colors.accent,
-              borderRadius: 15,
-              paddingHorizontal: 10,
-            }}
-            onPress={() => changeMode("steps")}
-          >
-            <Text style={styles.textSize}>Zubereitung</Text>
+          <TouchableOpacity style={{backgroundColor: mode === "steps" ? colors.primary:colors.background, borderRadius: 50, paddingHorizontal: 15, paddingVertical: 5}} onPress={() =>changeMode("steps")}>
+            <Text style={{fontSize: 20}}>Zubereitung</Text>
           </TouchableOpacity>
         </View>
         {mode === "ingredients" ? (
@@ -230,14 +216,14 @@ const addInstructions = () => {
             </View>
             {/* Kategorie View */}
             <View style={styles.categorieContainer}>
-              <Text style={styles.textSize}>Kategorie:</Text>
+              <Text style={{fontSize: 20, fontWeight: "bold", paddingVertical: 5, borderRadius: 10, width: 150}}>Kategorie:</Text>
               <TextInput
                 style={{
                   borderWidth: 1,
                   borderRadius: 10,
-                  backgroundColor: colors.background,
+                  backgroundColor: colors.primary,
                   borderColor: colors.primary,
-                  fontSize: 15,
+                  fontSize: 20,
                   padding: 5,
                   maxWidth: "40%"
                 }}
@@ -245,10 +231,8 @@ const addInstructions = () => {
                 value={category}
                 onChangeText={(text) => setCategory(text)}
               />
-              {/*<TouchableOpacity style={{padding: 10}}>*/}
-              {/*  <Ionicons name="pencil" size={30} color="black"/>*/}
-              {/*</TouchableOpacity>*/}
             </View>
+            <View style={{backgroundColor:"black", height: 1, marginVertical:10 }}/>
             {/* Zutaten View */}
             <View style={styles.ingredientsContainer}>
               <Text style={styles.textSize}>Zutaten</Text>
@@ -465,6 +449,7 @@ const addInstructions = () => {
                 <TouchableOpacity onPress={addInstructions}>
                   <Ionicons name="add-circle-outline" size={25} color="black" />
                 </TouchableOpacity>
+                
                 <TextInput
                   value={instructionValue}
                   onChangeText={(text) => setInstructionValue(text)}
@@ -472,7 +457,7 @@ const addInstructions = () => {
                   placeholder="Schritt hinzufügen"
                 />
               </View>
-
+              <View style={{backgroundColor:"black", height: 1, marginVertical:10 }}/>
               {instructions.length > 0 ? (
                 <SafeAreaView style={{ padding: 20 }}>
                   <ScrollView
@@ -519,27 +504,25 @@ const addInstructions = () => {
           </View>
         )}
       </View>
-      <View
-        style={{
-          position: "absolute",
+        <SafeAreaView style={{position: "absolute",
           bottom: 0,
           width: "100%",
           backgroundColor: colors.primary,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
           paddingLeft: 10,
-        }}
-      >
-        <TouchableOpacity onPress={() => {props.navigation.navigate("Home");}}>
-          <Ionicons name="trash-outline" size={30} color="black" />
-        </TouchableOpacity>
+          paddingBottom: 10,
+          paddingRight: 10}}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",}}>
+                <TouchableOpacity onPress={() => {props.navigation.navigate("Home");}}>
+                  <Ionicons name="trash-outline" size={30} color="black" />
+               </TouchableOpacity>
+              <Text style={styles.textSize}>Edit Mode</Text>
+              <TouchableOpacity onPress={saveDataToRecipe}>
+                <Ionicons name="checkmark-circle-outline" size={30} color="black" />
+              </TouchableOpacity>
+            </View>
 
-        <Text style={styles.textSize}>Edit Mode</Text>
-        <TouchableOpacity onPress={saveDataToRecipe}>
-          <Ionicons name="checkmark-circle-outline" size={30} color="black" />
-        </TouchableOpacity>
-      </View>
+          
+        </SafeAreaView>
     </View>
   );
 
@@ -550,37 +533,42 @@ const addInstructions = () => {
       <CameraTest setImage={setNewImage} cameraModal={cameraModal} setCameraModal={setCameraModal} />
       <View style={styles.textContainer}>
         <View style={styles.textRow}>
-          <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() =>changeMode("ingredients")}>
-            <Text style={[styles.textSize]}>Zutaten</Text>
+          <TouchableOpacity style={{backgroundColor: colors.primary, borderRadius: 50, paddingHorizontal: 15, paddingVertical: 5}} onPress={() =>changeMode("ingredients")}>
+            <Text style={{fontSize: 20}}>Zutaten</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{backgroundColor: colors.accent, borderRadius: 15, paddingHorizontal: 10}} onPress={() =>changeMode("steps")}>
-            <Text style={[styles.textSize]}>Zubereitung</Text>
+          <TouchableOpacity style={{backgroundColor: colors.primary, borderRadius: 50, paddingHorizontal: 15, paddingVertical: 5}} onPress={() =>changeMode("steps")}>
+            <Text style={{fontSize: 20}}>Zubereitung</Text>
           </TouchableOpacity>
         </View>
       </View>
       {mode === "ingredients" ? (
         <View>
-          <View style={styles.iconContainer}>
-            <View style={{padding:5}}>
+          <View style={{display: 'flex', flexDirection:'row', flexWrap: 'wrap', gap: 30, justifyContent: 'center', marginVertical: 15}}>
+            <View style={{}}>
               <Ionicons name="people-outline" size={30} color="black" />
-              <TextInput
-                style={{padding:5, textAlign: 'center'}} keyboardType='numeric' value={portionSize.toString()} onChangeText={(text) => recalculatePortionSize(parseInt(text))}  />
+              <TextInput style={{textAlign: 'center'}}
+                keyboardType='numeric' value={portionSize.toString()} onChangeText={(text) => recalculatePortionSize(parseInt(text))}  />
             </View>
-            <View style={{ padding: 5 }}>
+              <View style={{display: 'flex', alignItems:'center'}}>
                 <Ionicons name="time-outline" size={30} color="black" />
-                <Text style={{ textAlign: "center" }}>
+                <Text >
                   {prepTime}
                 </Text>
               </View>
-
-              <View style={{ padding: 5 }}>
+              <View style={{display: 'flex', alignItems:'center'}}>
                 <Ionicons name="heart-outline" size={30} color="black" />
               </View>
           </View>
         {/* Kategorie*/}
           <View style={styles.categorieContainer}>
-              <Text style={styles.textSize}>Kategorie:</Text>
-              <TextInput style={{padding: 5, textAlign: "center", maxWidth: "30%", fontSize: 17, color: 'black'}} placeholder={category}  value={category} onChangeText={(text) => setCategory(text)} />
+              <Text style={{fontSize: 20, fontWeight: "bold", paddingVertical: 5, borderRadius: 10,}}>Kategorie:</Text>
+              <TextInput style={{borderWidth: 1,
+                  borderRadius: 10,
+                  backgroundColor: colors.primary,
+                  borderColor: colors.primary,
+                  fontSize: 20,
+                  padding: 5,
+                  maxWidth: "40%"}} placeholder={category}  value={category} onChangeText={(text) => setCategory(text)} />
           </View>
         {/* zutaten*/}
 
@@ -799,16 +787,25 @@ const addInstructions = () => {
         
         )
       }
-      <View style={{position: "absolute", bottom: 0, width: "100%", backgroundColor: colors.accent, flexDirection:'row', justifyContent:'space-between', alignItems: 'center', paddingLeft: 10}}>
-        <TouchableOpacity onPress={() => {props.navigation.navigate("Home")}}>
-          <Ionicons name="trash-outline" size={30} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.textSize}>Edit Mode</Text>
-        <TouchableOpacity onPress={saveDataToRecipe}>
-          <Ionicons name="checkmark-circle-outline" size={30} color="black"/>
-        </TouchableOpacity>
+      <SafeAreaView style={{position: "absolute",
+          bottom: 0,
+          width: "100%",
+          backgroundColor: colors.primary,
+          paddingLeft: 10,
+          paddingBottom: 10,
+          paddingRight: 10}}>
+            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center",}}>
+                <TouchableOpacity onPress={() => {props.navigation.navigate("Home");}}>
+                  <Ionicons name="trash-outline" size={30} color="black" />
+               </TouchableOpacity>
+              <Text style={styles.textSize}>Edit Mode</Text>
+              <TouchableOpacity onPress={saveDataToRecipe}>
+                <Ionicons name="checkmark-circle-outline" size={30} color="black" />
+              </TouchableOpacity>
+            </View>
 
-      </View>
+          
+        </SafeAreaView>
     </View>
   )
 }
