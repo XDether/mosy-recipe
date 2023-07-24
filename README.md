@@ -18,7 +18,7 @@ Willkommen zur React Native Rezepte App! Diese App ermöglicht es Benutzern, ver
 2. Stelle sicher, dass [Expo CLI](https://docs.expo.io/get-started/installation/) installiert ist.
 3. Klone dieses Repository:
 4. https://github.com/timmno12/mosy-recipe.git
-5. cd react-native-rezepte-app
+5. cd mosy-recipe
 6. Installiere die Abhängigkeiten:
    npm install
 
