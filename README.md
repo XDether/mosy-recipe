@@ -1,6 +1,6 @@
 # Savory Salmon - A React Native Recipe App
 
-<img src="screenshots.png" width="50%" height="50%">
+<img src="screenshots.png" width="25%" height="25%">
 
 Willkommen zur React Native Rezepte App! Diese App ermöglicht es Benutzern, verschiedene Rezepte zu durchsuchen und zu entdecken, und bietet die Möglichkeit, auch Rezepte von Chefkoch zu nutzen.
 
