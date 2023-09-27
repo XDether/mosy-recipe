@@ -34,7 +34,7 @@ Willkommen zur React Native Rezepte App! Diese App ermöglicht es Benutzern, ver
 
 ## Chefkoch Disclaimer
 
-Diese App nutzt Informationen und Daten von Chefkoch, einer beliebten Website für Rezepte. Wir möchten darauf hinweisen, dass wir keine offizielle API von Chefkoch verwenden. Statt dessen müssen wir die Website möglicherweise mithilfe von Web Scraping-Techniken durchsuchen, um die gewünschten Rezeptinformationen zu erhalten.
+Diese App nutzt Informationen und Daten von Chefkoch, einer beliebten Website für Rezepte. Wir möchten darauf hinweisen, dass wir keine offizielle API von Chefkoch verwenden. Statt dessen müssen wir die Website mithilfe von Web Scraping-Techniken durchsuchen, um die gewünschten Rezeptinformationen zu erhalten.
 Wir möchten betonen, dass Web Scraping ohne die ausdrückliche Genehmigung des Website-Betreibers gegen die Nutzungsbedingungen der Website verstoßen kann und in einigen Fällen auch gegen geltendes Recht. Wir übernehmen keine Verantwortung für die Verletzung von Nutzungsbedingungen oder Gesetzen im Zusammenhang mit der Verwendung dieser App.
 Als Entwickler sind wir uns der ethischen Verantwortung bewusst, die mit dem Scrapen von Websites einhergeht. Wir werden unser Bestes tun, um das Scrapen sorgfältig und verantwortungsbewusst durchzuführen und die Leistung der Website nicht zu beeinträchtigen.
 Wir empfehlen den Benutzern unserer App, ihre eigenen Rezepte hochzuladen und die offizielle Chefkoch-Website oder -App zu verwenden, um die neuesten und genauesten Rezepte zu erhalten.
